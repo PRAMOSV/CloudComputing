@@ -132,4 +132,190 @@
             color: var(--accent-blue);
             margin-bottom: 1.25rem;
             display: flex;
-            align-items
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card p {
+            margin-bottom: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .card p strong {
+            color: var(--text-main);
+        }
+
+        .card a.text-link {
+            color: var(--accent-blue);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .card a.text-link:hover {
+            color: #60a5fa;
+            text-decoration: underline;
+        }
+
+        ul {
+            list-style: none;
+            margin-bottom: 1rem;
+        }
+
+        li {
+            margin-bottom: 0.75rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+
+        li i {
+            color: var(--accent-blue);
+            margin-top: 0.25rem;
+        }
+
+        /* Etiquetas (Tags) */
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-top: 2rem;
+        }
+
+        .tag {
+            background-color: rgba(59, 130, 246, 0.1);
+            color: #60a5fa;
+            padding: 0.4rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 5rem;
+            padding: 2rem 0;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border-color);
+        }
+
+        /* Animación inicial */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Hero Section -->
+        <header class="hero">
+            <h1>Paco Urbano Herminio Ramos Vásquez</h1>
+            <h2>Digital Process Automation Engineer | Código: 2131891227</h2>
+            <div class="contact-links">
+                <a href="mailto:pramos@autonoma.edu.pe"><i class="fas fa-envelope"></i> Correo Institucional</a>
+                <a href="https://www.linkedin.com/in/pacoramosv/" target="_blank"><i class="fab fa-linkedin"></i> LinkedIn</a>
+            </div>
+        </header>
+
+        <!-- Contexto Académico -->
+        <section>
+            <h2 class="section-title"><i class="fas fa-graduation-cap"></i> Contexto de Evaluación Académica</h2>
+            <div class="card visible">
+                <p><strong><i class="fas fa-book"></i> Curso:</strong> CLOUD COMPUTING Y ARQUITECTURAS DIGITALES</p>
+                <p><strong><i class="fas fa-university"></i> Institución:</strong> Universidad Autónoma del Perú - Ingeniería de Sistemas</p>
+                <p><strong><i class="fas fa-user-tie"></i> Docente:</strong> CLADUIO ISAIAS HUANCAHUIRE BRAVO <a href="mailto:chuancahuireb@autonoma.edu.pe" class="text-link">(chuancahuireb@autonoma.edu.pe)</a></p>
+                <p><strong><i class="far fa-calendar-alt"></i> Fecha:</strong> 23 de octubre de 2026</p>
+                <p><strong><i class="fas fa-bullseye"></i> Objetivo:</strong> Publicación de portafolio web en plataformas de Static Website Hosting (GitHub Pages) como evidencia de ejecución del entregable práctico.</p>
+            </div>
+        </section>
+
+        <!-- Cursos y Certificaciones -->
+        <section>
+            <h2 class="section-title"><i class="fas fa-certificate"></i> Cursos y Certificaciones</h2>
+            <div class="grid-2">
+                <div class="card animate-on-scroll">
+                    <h3><i class="fas fa-cloud"></i> Cloud & Arquitecturas</h3>
+                    <ul>
+                        <li><i class="fas fa-check-circle"></i> <span><strong>AWS IAM:</strong> Laboratorio 1 - Introducción a AWS IAM.</span></li>
+                        <li><i class="fas fa-check-circle"></i> <span><strong>Credencial AWS:</strong> AWS Academy Graduate - Cloud Foundations - Training Badge.</span></li>
+                        <li><i class="fas fa-check-circle"></i> <span><strong>Microsoft Azure:</strong> Aprende Azure - Almacenamiento, seguridad y redes virtuales.</span></li>
+                    </ul>
+                </div>
+                <div class="card animate-on-scroll">
+                    <h3><i class="fas fa-robot"></i> Automatización & IA</h3>
+                    <ul>
+                        <li><i class="fas fa-check-circle"></i> <span>Advanced de Automation Anywhere 360</span></li>
+                        <li><i class="fas fa-check-circle"></i> <span>Cuarta revolución Industrial: Data science</span></li>
+                        <li><i class="fas fa-check-circle"></i> <span>Fundamentos de Inteligencia Artificial: Redes neuronales</span></li>
+                        <li><i class="fas fa-check-circle"></i> <span>Mejora y Automatización de Procesos con Low Code / No Code</span></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Experiencia Profesional -->
+        <section>
+            <h2 class="section-title"><i class="fas fa-briefcase"></i> Experiencia Profesional Destacada</h2>
+            <div class="grid-2">
+                <div class="card animate-on-scroll">
+                    <h3>Banco de Crédito BCP / TCS</h3>
+                    <p><strong>Digital Process Automation Engineer / IT Analyst</strong></p>
+                    <ul>
+                        <li><i class="fas fa-angle-right"></i> <span>Desarrollo de bots transaccionales complejos con interacción en sistemas Mainframe y aplicativos web.</span></li>
+                        <li><i class="fas fa-angle-right"></i> <span>Creación de consultas SQL avanzadas e integración de Macros en Excel para procesamiento financiero.</span></li>
+                    </ul>
+                </div>
+                <div class="card animate-on-scroll">
+                    <h3>KPMG en Perú</h3>
+                    <p><strong>Consultor RPA & Business Process Automation</strong></p>
+                    <ul>
+                        <li><i class="fas fa-angle-right"></i> <span>Desarrollo integral (end-to-end) de automatizaciones y modelamiento BPMN para clientes top.</span></li>
+                        <li><i class="fas fa-angle-right"></i> <span>Gestión documental interactuando directamente con repositorios en AWS (Amazon FSx).</span></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="tags">
+                <span class="tag"><i class="fas fa-code"></i> Automation Anywhere</span>
+                <span class="tag"><i class="fas fa-bolt"></i> Power Automate</span>
+                <span class="tag"><i class="fas fa-database"></i> SQL Server</span>
+                <span class="tag"><i class="fab fa-aws"></i> AWS Cloud</span>
+                <span class="tag"><i class="fas fa-spider"></i> Web Scraping</span>
+                <span class="tag"><i class="fas fa-sitemap"></i> BPMN</span>
+            </div>
+        </section>
+
+        <footer>
+            <p>Portafolio generado para la evaluación de Cloud Computing y Arquitecturas Digitales - 2026</p>
+        </footer>
+    </div>
+
+    <!-- Script para animación al hacer scroll -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+
+            document.querySelectorAll('.animate-on-scroll').forEach((card) => {
+                observer.observe(card);
+            });
+        });
+    </script>
+</body>
+</html>
