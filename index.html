@@ -1,321 +1,1816 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portafolio Web - Paco Ramos</title>
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <!-- FontAwesome para Íconos -->
+    <title>INDUSTRIAS MARZZELLI PERÚ CUEROS EIRL | Tienda & SaaS E-Commerce</title>
+    <!-- Favicon SVG Inline Emblema Marzzelli -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='47' fill='%232A2D34' stroke='%23D4AF37' stroke-width='5'/%3E%3Ccircle cx='50' cy='50' r='39' fill='none' stroke='%23D4AF37' stroke-width='1.5'/%3E%3Ctext x='50' y='62' font-family='Georgia,serif' font-weight='bold' font-size='38' fill='%23D4AF37' text-anchor='middle'%3EMP%3C/text%3E%3C/svg%3E">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Canvas Confetti (Efecto de celebración en compra y suscripción) -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            wine: '#6B0D23',
+                            wineDark: '#4A0817',
+                            wineLight: '#9E1B3B',
+                            slate: '#2A2D34',
+                            slateLight: '#3E424B',
+                            slateBg: '#F4F5F7',
+                            gold: '#D4AF37',
+                            goldLight: '#F3E5AB',
+                            darkBg: '#0B0D11',
+                            darkCard: '#151820',
+                            darkBorder: '#262B36'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Cinzel', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <script>
+        if (localStorage.getItem('marzzelli-theme') === 'dark' || 
+           (!('marzzelli-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        }
+    </script>
+
     <style>
-        :root {
-            --bg-dark: #0f172a;
-            --bg-card: #1e293b;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --accent-blue: #3b82f6;
-            --accent-hover: #2563eb;
-            --border-color: #334155;
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #6B0D23; border-radius: 4px; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Efectos de tarjetas y hover */
+        .product-card {
+            transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease;
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+        .product-card:hover .product-img {
+            transform: scale(1.07);
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Inter', sans-serif;
+        /* Animación de aparición al hacer scroll */
+        .reveal {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.65s ease-out, transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
         }
-
-        body {
-            background-color: var(--bg-dark);
-            color: var(--text-main);
-            line-height: 1.6;
-        }
-
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-
-        /* Hero / Presentación */
-        .hero {
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-            border: 1px solid var(--border-color);
-            padding: 4rem 2rem;
-            border-radius: 16px;
-            text-align: center;
-            margin-bottom: 3rem;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
-            animation: fadeInDown 0.8s ease-out;
-        }
-
-        .hero h1 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-            font-weight: 700;
-        }
-
-        .hero h2 {
-            font-size: 1.25rem;
-            color: var(--text-muted);
-            font-weight: 400;
-            margin-bottom: 2rem;
-        }
-
-        .contact-links {
-            display: flex;
-            justify-content: center;
-            gap: 1.5rem;
-            flex-wrap: wrap;
-        }
-
-        .contact-links a {
-            color: #ffffff;
-            text-decoration: none;
-            background-color: var(--accent-blue);
-            padding: 0.75rem 1.5rem;
-            border-radius: 8px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .contact-links a:hover {
-            background-color: var(--accent-hover);
-            transform: translateY(-3px);
-            box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.4);
-        }
-
-        /* Secciones y Tarjetas */
-        .section-title {
-            font-size: 1.75rem;
-            color: var(--text-main);
-            border-bottom: 2px solid var(--accent-blue);
-            padding-bottom: 0.5rem;
-            margin-bottom: 2rem;
-            margin-top: 4rem;
-            display: inline-block;
-        }
-
-        .grid-2 {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 2rem;
-        }
-
-        .card {
-            background: var(--bg-card);
-            padding: 2rem;
-            border-radius: 12px;
-            border: 1px solid var(--border-color);
-            transition: all 0.3s ease;
-            opacity: 0; /* Para la animación de scroll */
-            transform: translateY(20px);
-        }
-
-        .card.visible {
+        .reveal.reveal-visible {
             opacity: 1;
             transform: translateY(0);
         }
 
-        .card:hover {
-            transform: translateY(-5px);
-            border-color: var(--accent-blue);
-            box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.5);
+        /* Animación de modales */
+        @keyframes modalPop {
+            from { opacity: 0; transform: scale(0.94) translateY(10px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .modal-pop {
+            animation: modalPop 0.28s cubic-bezier(0.22, 1, 0.36, 1) forwards;
         }
 
-        .card h3 {
-            color: var(--accent-blue);
-            margin-bottom: 1.25rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
+        /* Efecto de rebote para el carrito */
+        @keyframes cartBounce {
+            0%, 100% { transform: scale(1); }
+            40% { transform: scale(1.28); }
+            70% { transform: scale(0.92); }
+        }
+        .cart-bounce {
+            animation: cartBounce 0.45s ease;
         }
 
-        .card p {
-            margin-bottom: 0.75rem;
-            color: var(--text-muted);
+        /* Pulso WhatsApp */
+        .whatsapp-pulse { animation: pulse-ring 2s infinite; }
+        @keyframes pulse-ring {
+            0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.6); }
+            70% { box-shadow: 0 0 0 14px rgba(37, 211, 102, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
         }
 
-        .card p strong {
-            color: var(--text-main);
+        /* Toasts */
+        @keyframes slideInUp {
+            from { transform: translateY(16px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
+        .toast-enter { animation: slideInUp 0.25s ease-out forwards; }
 
-        .card a.text-link {
-            color: var(--accent-blue);
-            text-decoration: none;
-            transition: color 0.2s;
+        /* Brillo metálico sutil en botones VIP */
+        .btn-shine {
+            position: relative;
+            overflow: hidden;
         }
-
-        .card a.text-link:hover {
-            color: #60a5fa;
-            text-decoration: underline;
+        .btn-shine::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -120%;
+            width: 60%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.22), transparent);
+            transition: left 0.6s ease;
         }
-
-        ul {
-            list-style: none;
-            margin-bottom: 1rem;
-        }
-
-        li {
-            margin-bottom: 0.75rem;
-            color: var(--text-muted);
-            display: flex;
-            align-items: flex-start;
-            gap: 0.5rem;
-        }
-
-        li i {
-            color: var(--accent-blue);
-            margin-top: 0.25rem;
-        }
-
-        /* Etiquetas (Tags) */
-        .tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.75rem;
-            margin-top: 2rem;
-        }
-
-        .tag {
-            background-color: rgba(59, 130, 246, 0.1);
-            color: #60a5fa;
-            padding: 0.4rem 1rem;
-            border-radius: 9999px;
-            font-size: 0.875rem;
-            font-weight: 600;
-            border: 1px solid rgba(59, 130, 246, 0.2);
-        }
-
-        footer {
-            text-align: center;
-            margin-top: 5rem;
-            padding: 2rem 0;
-            color: var(--text-muted);
-            border-top: 1px solid var(--border-color);
-        }
-
-        /* Animación inicial */
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .btn-shine:hover::after {
+            left: 140%;
         }
     </style>
 </head>
-<body>
+<body class="bg-gray-50 text-gray-800 dark:bg-brand-darkBg dark:text-gray-100 font-sans antialiased flex flex-col min-h-screen transition-colors duration-300">
 
-    <div class="container">
-        <!-- Hero Section -->
-        <header class="hero">
-            <h1>Paco Urbano Herminio Ramos Vásquez</h1>
-            <h2>Digital Process Automation Engineer | Código: 2131891227</h2>
-            <div class="contact-links">
-                <a href="mailto:pramos@autonoma.edu.pe"><i class="fas fa-envelope"></i> Correo Institucional</a>
-                <a href="https://www.linkedin.com/in/pacoramosv/" target="_blank"><i class="fab fa-linkedin"></i> LinkedIn</a>
-            </div>
-        </header>
-
-        <!-- Contexto Académico -->
-        <section>
-            <h2 class="section-title"><i class="fas fa-graduation-cap"></i> Contexto de Evaluación Académica</h2>
-            <div class="card visible">
-                <p><strong><i class="fas fa-book"></i> Curso:</strong> CLOUD COMPUTING Y ARQUITECTURAS DIGITALES</p>
-                <p><strong><i class="fas fa-university"></i> Institución:</strong> Universidad Autónoma del Perú - Ingeniería de Sistemas</p>
-                <p><strong><i class="fas fa-user-tie"></i> Docente:</strong> CLADUIO ISAIAS HUANCAHUIRE BRAVO <a href="mailto:chuancahuireb@autonoma.edu.pe" class="text-link">(chuancahuireb@autonoma.edu.pe)</a></p>
-                <p><strong><i class="far fa-calendar-alt"></i> Fecha:</strong> 23 de octubre de 2026</p>
-                <p><strong><i class="fas fa-bullseye"></i> Objetivo:</strong> Publicación de portafolio web en plataformas de Static Website Hosting (GitHub Pages) como evidencia de ejecución del entregable práctico.</p>
-            </div>
-        </section>
-
-        <!-- Cursos y Certificaciones -->
-        <section>
-            <h2 class="section-title"><i class="fas fa-certificate"></i> Cursos y Certificaciones</h2>
-            <div class="grid-2">
-                <div class="card animate-on-scroll">
-                    <h3><i class="fas fa-cloud"></i> Cloud & Arquitecturas</h3>
-                    <ul>
-                        <li><i class="fas fa-check-circle"></i> <span><strong>AWS IAM:</strong> Laboratorio 1 - Introducción a AWS IAM.</span></li>
-                        <li><i class="fas fa-check-circle"></i> <span><strong>Credencial AWS:</strong> AWS Academy Graduate - Cloud Foundations - Training Badge.</span></li>
-                        <li><i class="fas fa-check-circle"></i> <span><strong>Microsoft Azure:</strong> Aprende Azure - Almacenamiento, seguridad y redes virtuales.</span></li>
-                    </ul>
-                </div>
-                <div class="card animate-on-scroll">
-                    <h3><i class="fas fa-robot"></i> Automatización & IA</h3>
-                    <ul>
-                        <li><i class="fas fa-check-circle"></i> <span>Advanced de Automation Anywhere 360</span></li>
-                        <li><i class="fas fa-check-circle"></i> <span>Cuarta revolución Industrial: Data science</span></li>
-                        <li><i class="fas fa-check-circle"></i> <span>Fundamentos de Inteligencia Artificial: Redes neuronales</span></li>
-                        <li><i class="fas fa-check-circle"></i> <span>Mejora y Automatización de Procesos con Low Code / No Code</span></li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <!-- Experiencia Profesional -->
-        <section>
-            <h2 class="section-title"><i class="fas fa-briefcase"></i> Experiencia Profesional Destacada</h2>
-            <div class="grid-2">
-                <div class="card animate-on-scroll">
-                    <h3>Banco de Crédito BCP / TCS</h3>
-                    <p><strong>Digital Process Automation Engineer / IT Analyst</strong></p>
-                    <ul>
-                        <li><i class="fas fa-angle-right"></i> <span>Desarrollo de bots transaccionales complejos con interacción en sistemas Mainframe y aplicativos web.</span></li>
-                        <li><i class="fas fa-angle-right"></i> <span>Creación de consultas SQL avanzadas e integración de Macros en Excel para procesamiento financiero.</span></li>
-                    </ul>
-                </div>
-                <div class="card animate-on-scroll">
-                    <h3>KPMG en Perú</h3>
-                    <p><strong>Consultor RPA & Business Process Automation</strong></p>
-                    <ul>
-                        <li><i class="fas fa-angle-right"></i> <span>Desarrollo integral (end-to-end) de automatizaciones y modelamiento BPMN para clientes top.</span></li>
-                        <li><i class="fas fa-angle-right"></i> <span>Gestión documental interactuando directamente con repositorios en AWS (Amazon FSx).</span></li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div class="tags">
-                <span class="tag"><i class="fas fa-code"></i> Automation Anywhere</span>
-                <span class="tag"><i class="fas fa-bolt"></i> Power Automate</span>
-                <span class="tag"><i class="fas fa-database"></i> SQL Server</span>
-                <span class="tag"><i class="fab fa-aws"></i> AWS Cloud</span>
-                <span class="tag"><i class="fas fa-spider"></i> Web Scraping</span>
-                <span class="tag"><i class="fas fa-sitemap"></i> BPMN</span>
-            </div>
-        </section>
-
-        <footer>
-            <p>Portafolio generado para la evaluación de Cloud Computing y Arquitecturas Digitales - 2026</p>
-        </footer>
+    <!-- TOP ANNOUNCEMENT BAR -->
+    <div class="bg-brand-slate dark:bg-black text-white text-xs py-2 px-4 sm:px-6 font-medium tracking-wide flex justify-between items-center border-b border-white/10">
+        <button onclick="openNewsletterModal()" class="hidden md:flex items-center gap-2 text-brand-goldLight hover:text-brand-gold transition">
+            <i class="fas fa-gift animate-bounce text-brand-gold"></i>
+            <span>Suscríbete al Club Marzzelli y obtén <strong>10% OFF</strong> (Código: MARZZELLI10)</span>
+        </button>
+        <div class="w-full md:w-auto text-center font-semibold tracking-wider text-[11px] sm:text-xs flex items-center justify-center gap-2">
+            <span>✨ INDUSTRIAS MARZZELLI PERÚ CUEROS EIRL</span>
+            <button onclick="openNewsletterModal()" class="md:hidden bg-brand-wine text-brand-goldLight text-[10px] px-2 py-0.5 rounded-full font-bold">10% OFF</button>
+        </div>
+        <div class="hidden lg:flex gap-4 items-center text-gray-300">
+            <button onclick="requestResetDemo()" class="hover:text-rose-300 transition flex items-center gap-1" title="Restaurar stock y pedidos iniciales">
+                <i class="fas fa-rotate-left text-xs"></i> Reiniciar Demo
+            </button>
+            <button onclick="toggleView('dashboard')" class="hover:text-brand-gold transition flex items-center gap-1">
+                <i class="fas fa-cloud text-xs"></i> SaaS Admin
+            </button>
+        </div>
     </div>
 
-    <!-- Script para animación al hacer scroll -->
+    <!-- MAIN HEADER NAVIGATION -->
+    <header class="bg-white/90 dark:bg-brand-darkCard/90 backdrop-blur-lg border-b border-gray-200 dark:border-brand-darkBorder sticky top-0 z-40 shadow-sm transition-colors duration-300">
+        <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16 sm:h-20 gap-2">
+                
+                <!-- Brand Logo (Emblema Circular Metálico SVG) -->
+                <div class="flex items-center space-x-2.5 sm:space-x-3 cursor-pointer shrink-0 group" onclick="toggleView('storefront'); filterProducts('all', false)">
+                    <svg class="w-10 h-10 sm:w-11 sm:h-11 shrink-0 drop-shadow group-hover:scale-105 transition-transform duration-300" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-label="Logo Marzzelli Perú Cueros">
+                        <defs>
+                            <linearGradient id="brassGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#F3E5AB"/>
+                                <stop offset="50%" stop-color="#D4AF37"/>
+                                <stop offset="100%" stop-color="#997A15"/>
+                            </linearGradient>
+                        </defs>
+                        <circle cx="50" cy="50" r="47" fill="#2A2D34" stroke="url(#brassGrad)" stroke-width="5"/>
+                        <circle cx="50" cy="50" r="39" fill="none" stroke="url(#brassGrad)" stroke-width="1.5"/>
+                        <text x="50" y="61" font-family="Cinzel, Georgia, serif" font-weight="700" font-size="35" fill="url(#brassGrad)" text-anchor="middle" letter-spacing="-1">MP</text>
+                        <text x="50" y="77" font-family="Inter, sans-serif" font-weight="700" font-size="8.5" fill="#F3E5AB" text-anchor="middle" letter-spacing="1.5">PERÚ</text>
+                    </svg>
+                    <div>
+                        <span class="font-serif font-bold text-base sm:text-xl text-brand-slate dark:text-white tracking-wider block leading-tight">MARZZELLI</span>
+                        <span class="text-[8px] sm:text-[9px] tracking-widest text-brand-wine dark:text-brand-gold uppercase block font-semibold">PERÚ CUEROS E.I.R.L.</span>
+                    </div>
+                </div>
+
+                <!-- Desktop Nav -->
+                <nav class="hidden lg:flex space-x-6 xl:space-x-7 font-medium text-xs xl:text-sm text-gray-700 dark:text-gray-300 tracking-wide uppercase">
+                    <button onclick="toggleView('storefront'); filterProducts('all')" class="hover:text-brand-wine dark:hover:text-brand-gold transition py-2">Todos</button>
+                    <button onclick="toggleView('storefront'); filterProducts('damas')" class="hover:text-brand-wine dark:hover:text-brand-gold transition py-2">Damas</button>
+                    <button onclick="toggleView('storefront'); filterProducts('caballeros')" class="hover:text-brand-wine dark:hover:text-brand-gold transition py-2">Caballeros</button>
+                    <button onclick="toggleView('storefront'); filterProducts('textil')" class="hover:text-brand-wine dark:hover:text-brand-gold transition py-2">Cuero & Textil</button>
+                    <button onclick="toggleView('storefront'); filterProducts('calzado')" class="hover:text-brand-wine dark:hover:text-brand-gold transition py-2">Calzado</button>
+                </nav>
+
+                <!-- Controls -->
+                <div class="flex items-center space-x-1.5 sm:space-x-3 md:space-x-3.5">
+                    <div class="relative hidden md:block">
+                        <input type="text" id="searchInput" onkeyup="searchProducts(this.value)" placeholder="Buscar artículo o SKU..." 
+                            class="bg-gray-100 dark:bg-brand-darkBg dark:text-gray-200 dark:border dark:border-brand-darkBorder text-xs rounded-full py-2 pl-4 pr-9 focus:outline-none focus:ring-2 focus:ring-brand-wine dark:focus:ring-brand-gold w-36 lg:w-44 transition-all focus:w-56">
+                        <i class="fas fa-search absolute right-3 top-2.5 text-gray-400 text-xs"></i>
+                    </div>
+
+                    <!-- Newsletter Trigger Icon -->
+                    <button onclick="openNewsletterModal()" aria-label="Suscripción y descuento" title="Obtener 10% OFF"
+                        class="hidden sm:flex p-2 rounded-full bg-amber-50 dark:bg-brand-gold/15 text-amber-600 dark:text-brand-gold hover:bg-amber-100 dark:hover:bg-brand-gold/25 border border-amber-200 dark:border-brand-gold/30 transition">
+                        <i class="fas fa-gift text-sm w-4 h-4 flex items-center justify-center"></i>
+                    </button>
+
+                    <!-- Theme Switch -->
+                    <button onclick="toggleTheme()" aria-label="Cambiar modo claro u oscuro" title="Cambiar Modo Claro / Oscuro"
+                        class="p-2 rounded-full bg-gray-100 dark:bg-brand-darkBg text-gray-700 dark:text-brand-gold hover:bg-gray-200 dark:hover:bg-gray-800 border border-transparent dark:border-brand-darkBorder transition">
+                        <i id="themeIcon" class="fas fa-moon text-sm sm:text-base w-4 h-4 flex items-center justify-center"></i>
+                    </button>
+
+                    <!-- Cart Button -->
+                    <button id="cartHeaderBtn" onclick="toggleCartDrawer()" aria-label="Abrir carrito" class="relative p-2 text-gray-700 dark:text-gray-200 hover:text-brand-wine dark:hover:text-brand-gold transition">
+                        <i class="fas fa-shopping-bag text-lg sm:text-xl"></i>
+                        <span id="cartCount" class="absolute -top-0.5 -right-0.5 bg-brand-wine text-white text-[10px] font-bold rounded-full h-5 w-5 flex items-center justify-center border-2 border-white dark:border-brand-darkCard">0</span>
+                    </button>
+
+                    <!-- View Switcher -->
+                    <button id="viewToggleBtn" onclick="toggleView()" class="btn-shine bg-brand-slate dark:bg-brand-wine hover:bg-brand-wine dark:hover:bg-brand-wineLight text-white text-xs px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg shadow transition font-medium flex items-center gap-2 shrink-0">
+                        <i id="viewToggleIcon" class="fas fa-chart-line"></i>
+                        <span id="viewToggleText" class="hidden sm:inline">Dashboard</span>
+                    </button>
+
+                    <!-- Mobile Menu Toggle -->
+                    <button onclick="toggleMobileMenu()" aria-label="Menú móvil" class="lg:hidden p-2 text-gray-700 dark:text-gray-200">
+                        <i id="mobileMenuIcon" class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile Menu Drawer -->
+            <div id="mobileMenu" class="hidden lg:hidden border-t border-gray-200 dark:border-brand-darkBorder py-4 space-y-3 text-sm font-medium">
+                <div class="relative px-1">
+                    <input type="text" onkeyup="searchProducts(this.value)" placeholder="Buscar carteras, mochilas, calzado..." 
+                        class="w-full bg-gray-100 dark:bg-brand-darkBg dark:text-gray-200 border border-gray-200 dark:border-brand-darkBorder text-xs rounded-lg py-2.5 pl-4 pr-9 focus:outline-none">
+                    <i class="fas fa-search absolute right-4 top-3 text-gray-400 text-xs"></i>
+                </div>
+                <div class="grid grid-cols-2 gap-1.5 pt-1">
+                    <button onclick="toggleView('storefront'); filterProducts('all'); toggleMobileMenu()" class="text-left px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-brand-darkBg">Ver Todo</button>
+                    <button onclick="toggleView('storefront'); filterProducts('damas'); toggleMobileMenu()" class="text-left px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-brand-darkBg">Damas</button>
+                    <button onclick="toggleView('storefront'); filterProducts('caballeros'); toggleMobileMenu()" class="text-left px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-brand-darkBg">Caballeros</button>
+                    <button onclick="toggleView('storefront'); filterProducts('textil'); toggleMobileMenu()" class="text-left px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-brand-darkBg">Cuero & Textil</button>
+                    <button onclick="toggleView('storefront'); filterProducts('calzado'); toggleMobileMenu()" class="text-left px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-brand-darkBg">Calzado Fino</button>
+                    <button onclick="openNewsletterModal(); toggleMobileMenu()" class="text-left px-3 py-2 rounded-lg text-amber-600 dark:text-brand-gold font-semibold"><i class="fas fa-gift mr-1"></i> Cupón 10% OFF</button>
+                    <button onclick="toggleView('dashboard'); toggleMobileMenu()" class="col-span-2 text-center px-3 py-2 rounded-lg bg-brand-wine/10 text-brand-wine dark:text-brand-gold font-bold">
+                        <i class="fas fa-chart-line mr-1"></i> Acceso Dashboard SaaS
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-grow">
+        
+        <!-- ========================================== -->
+        <!-- 1. STOREFRONT VIEW                         -->
+        <!-- ========================================== -->
+        <div id="storefrontView" class="block">
+            
+            <!-- HERO BANNER -->
+            <section class="relative bg-gradient-to-br from-brand-slate via-[#1C1F26] to-[#0E1015] text-white overflow-hidden">
+                <!-- Ambient Luxury Glows -->
+                <div class="absolute -top-24 -right-24 w-96 h-96 bg-brand-wine/35 rounded-full blur-3xl pointer-events-none"></div>
+                <div class="absolute -bottom-24 -left-24 w-80 h-80 bg-brand-gold/15 rounded-full blur-3xl pointer-events-none"></div>
+
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-24 flex flex-col md:flex-row items-center justify-between gap-10 relative z-10">
+                    <div class="w-full md:w-1/2 space-y-5 text-center md:text-left">
+                        <div class="inline-flex items-center gap-2 bg-brand-wine/90 border border-brand-gold/30 text-white text-[11px] sm:text-xs tracking-widest font-semibold px-3.5 py-1.5 rounded-full uppercase shadow">
+                            <span class="w-2 h-2 rounded-full bg-brand-gold animate-pulse"></span>
+                            Colección Exclusiva 2026 • Cloud SaaS
+                        </div>
+                        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold leading-tight">
+                            Elegancia y Maestría en <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-goldLight via-brand-gold to-amber-500">Cuero Genuino</span>
+                        </h1>
+                        <p class="text-gray-300 text-sm sm:text-base max-w-lg mx-auto md:mx-0 leading-relaxed">
+                            Marroquinería peruana con sello artesanal. Explora nuestra tienda multiplataforma, aplica cupones de bienvenida y prueba el flujo de compra conectado en tiempo real al inventario.
+                        </p>
+                        <div class="flex flex-col sm:flex-row gap-3 justify-center md:justify-start pt-2">
+                            <a href="#catalogo" class="btn-shine w-full sm:w-auto justify-center bg-brand-wine hover:bg-brand-wineLight text-white font-semibold px-6 py-3.5 rounded-xl shadow-lg shadow-brand-wine/30 transition flex items-center gap-2">
+                                Explorar Catálogo <i class="fas fa-arrow-right text-xs"></i>
+                            </a>
+                            <button onclick="openNewsletterModal()" class="w-full sm:w-auto justify-center border border-brand-gold/50 bg-brand-gold/10 hover:bg-brand-gold hover:text-brand-slate text-brand-goldLight font-semibold px-6 py-3.5 rounded-xl transition flex items-center gap-2">
+                                <i class="fas fa-gift"></i> Reclamar 10% OFF
+                            </button>
+                        </div>
+
+                        <!-- Micro Trust Metrics -->
+                        <div class="grid grid-cols-3 gap-4 pt-4 border-t border-white/10 max-w-md mx-auto md:mx-0 text-center md:text-left">
+                            <div>
+                                <span class="font-serif font-bold text-lg sm:text-xl text-brand-gold block">100%</span>
+                                <span class="text-[11px] text-gray-400">Cuero Vacuno</span>
+                            </div>
+                            <div>
+                                <span class="font-serif font-bold text-lg sm:text-xl text-brand-gold block">24h</span>
+                                <span class="text-[11px] text-gray-400">Envío Express Lima</span>
+                            </div>
+                            <div>
+                                <span class="font-serif font-bold text-lg sm:text-xl text-brand-gold block">12 Meses</span>
+                                <span class="text-[11px] text-gray-400">Garantía Oficial</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Feature Glassmorphism Card -->
+                    <div class="w-full sm:w-4/5 md:w-5/12 relative">
+                        <div class="bg-white/10 backdrop-blur-md p-3.5 sm:p-4 rounded-2xl border border-white/20 shadow-2xl hover:border-brand-gold/40 transition duration-500">
+                            <div class="relative overflow-hidden rounded-xl group cursor-pointer" onclick="openQuickView(1)">
+                                <img src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=800&q=80" alt="Cartera Cuero Premium" class="w-full h-56 sm:h-72 object-cover group-hover:scale-105 transition duration-700">
+                                <span class="absolute top-3 left-3 bg-brand-wine text-white text-[10px] font-bold px-2.5 py-1 rounded-full uppercase shadow">Destacado</span>
+                                <div class="absolute top-3 right-3 w-10 h-10 rounded-full bg-brand-slate/90 border-2 border-brand-gold flex items-center justify-center shadow-lg">
+                                    <span class="font-serif font-bold text-xs text-brand-gold">MP</span>
+                                </div>
+                            </div>
+                            <div class="mt-4 flex justify-between items-center text-white px-1 gap-2">
+                                <div>
+                                    <h3 class="font-serif font-bold text-base sm:text-lg">Cartera Executive Marzzelli</h3>
+                                    <p class="text-xs text-gray-300">Cuero Vacuno • Emblema Metálico MP</p>
+                                </div>
+                                <div class="text-right shrink-0">
+                                    <span class="text-lg sm:text-xl font-bold text-brand-gold block">S/ 289.00</span>
+                                    <button onclick="addToCart(1)" class="text-[11px] text-emerald-300 hover:underline font-medium">+ Añadir ahora</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CATEGORY TILES -->
+            <section class="py-10 sm:py-12 bg-white dark:bg-brand-darkCard border-b border-gray-200 dark:border-brand-darkBorder transition-colors duration-300 reveal">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-7">
+                        <h2 class="font-serif text-xl sm:text-2xl font-bold text-brand-slate dark:text-white tracking-wide">
+                            EXPLORA POR CATEGORÍAS
+                        </h2>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Líneas artesanales diseñadas para durabilidad y distinción</p>
+                    </div>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
+                        <button onclick="filterProducts('all')" class="group bg-brand-slateBg dark:bg-brand-darkBg p-4 rounded-xl text-center hover:bg-brand-wine dark:hover:bg-brand-wine hover:text-white transition duration-300 shadow-sm border border-transparent dark:border-brand-darkBorder hover:-translate-y-1">
+                            <div class="w-12 h-12 bg-white dark:bg-brand-darkCard text-brand-wine dark:text-brand-gold group-hover:bg-white/20 group-hover:text-white rounded-full flex items-center justify-center mx-auto mb-2.5 shadow-sm transition">
+                                <i class="fas fa-border-all text-lg"></i>
+                            </div>
+                            <h3 class="font-semibold text-xs sm:text-sm">Todo el Catálogo</h3>
+                        </button>
+                        <button onclick="filterProducts('damas')" class="group bg-brand-slateBg dark:bg-brand-darkBg p-4 rounded-xl text-center hover:bg-brand-wine dark:hover:bg-brand-wine hover:text-white transition duration-300 shadow-sm border border-transparent dark:border-brand-darkBorder hover:-translate-y-1">
+                            <div class="w-12 h-12 bg-white dark:bg-brand-darkCard text-brand-wine dark:text-brand-gold group-hover:bg-white/20 group-hover:text-white rounded-full flex items-center justify-center mx-auto mb-2.5 shadow-sm transition">
+                                <i class="fas fa-shopping-bag text-lg"></i>
+                            </div>
+                            <h3 class="font-semibold text-xs sm:text-sm">Damas</h3>
+                        </button>
+                        <button onclick="filterProducts('caballeros')" class="group bg-brand-slateBg dark:bg-brand-darkBg p-4 rounded-xl text-center hover:bg-brand-wine dark:hover:bg-brand-wine hover:text-white transition duration-300 shadow-sm border border-transparent dark:border-brand-darkBorder hover:-translate-y-1">
+                            <div class="w-12 h-12 bg-white dark:bg-brand-darkCard text-brand-wine dark:text-brand-gold group-hover:bg-white/20 group-hover:text-white rounded-full flex items-center justify-center mx-auto mb-2.5 shadow-sm transition">
+                                <i class="fas fa-wallet text-lg"></i>
+                            </div>
+                            <h3 class="font-semibold text-xs sm:text-sm">Caballeros</h3>
+                        </button>
+                        <button onclick="filterProducts('textil')" class="group bg-brand-slateBg dark:bg-brand-darkBg p-4 rounded-xl text-center hover:bg-brand-wine dark:hover:bg-brand-wine hover:text-white transition duration-300 shadow-sm border border-transparent dark:border-brand-darkBorder hover:-translate-y-1">
+                            <div class="w-12 h-12 bg-white dark:bg-brand-darkCard text-brand-wine dark:text-brand-gold group-hover:bg-white/20 group-hover:text-white rounded-full flex items-center justify-center mx-auto mb-2.5 shadow-sm transition">
+                                <i class="fas fa-suitcase text-lg"></i>
+                            </div>
+                            <h3 class="font-semibold text-xs sm:text-sm">Cuero & Textil</h3>
+                        </button>
+                        <button onclick="filterProducts('calzado')" class="col-span-2 sm:col-span-1 group bg-brand-slateBg dark:bg-brand-darkBg p-4 rounded-xl text-center hover:bg-brand-wine dark:hover:bg-brand-wine hover:text-white transition duration-300 shadow-sm border border-transparent dark:border-brand-darkBorder hover:-translate-y-1">
+                            <div class="w-12 h-12 bg-white dark:bg-brand-darkCard text-brand-wine dark:text-brand-gold group-hover:bg-white/20 group-hover:text-white rounded-full flex items-center justify-center mx-auto mb-2.5 shadow-sm transition">
+                                <i class="fas fa-shoe-prints text-lg"></i>
+                            </div>
+                            <h3 class="font-semibold text-xs sm:text-sm">Calzado</h3>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PRODUCT CATALOG -->
+            <section id="catalogo" class="py-12 sm:py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-mt-20 reveal">
+                <div class="flex flex-col md:flex-row md:items-center justify-between mb-8 pb-4 border-b border-gray-200 dark:border-brand-darkBorder gap-4">
+                    <div>
+                        <h2 class="text-xl sm:text-2xl font-serif font-bold text-brand-slate dark:text-white">Catálogo con Control de Inventario</h2>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">Pulsa en cualquier imagen para Vista Rápida • Stock sincronizado en vivo</p>
+                    </div>
+
+                    <div class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1" id="filterBtnGroup">
+                        <button data-cat="all" onclick="filterProducts('all', false)" class="filter-btn shrink-0 bg-brand-wine text-white text-xs px-4 py-2 rounded-full font-medium transition shadow-sm">Todos</button>
+                        <button data-cat="damas" onclick="filterProducts('damas', false)" class="filter-btn shrink-0 bg-gray-200 dark:bg-brand-darkCard text-gray-700 dark:text-gray-300 text-xs px-4 py-2 rounded-full font-medium hover:bg-brand-wine hover:text-white transition">Damas</button>
+                        <button data-cat="caballeros" onclick="filterProducts('caballeros', false)" class="filter-btn shrink-0 bg-gray-200 dark:bg-brand-darkCard text-gray-700 dark:text-gray-300 text-xs px-4 py-2 rounded-full font-medium hover:bg-brand-wine hover:text-white transition">Caballeros</button>
+                        <button data-cat="textil" onclick="filterProducts('textil', false)" class="filter-btn shrink-0 bg-gray-200 dark:bg-brand-darkCard text-gray-700 dark:text-gray-300 text-xs px-4 py-2 rounded-full font-medium hover:bg-brand-wine hover:text-white transition">Cuero & Textil</button>
+                        <button data-cat="calzado" onclick="filterProducts('calzado', false)" class="filter-btn shrink-0 bg-gray-200 dark:bg-brand-darkCard text-gray-700 dark:text-gray-300 text-xs px-4 py-2 rounded-full font-medium hover:bg-brand-wine hover:text-white transition">Calzado</button>
+                    </div>
+                </div>
+
+                <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6"></div>
+            </section>
+
+            <!-- CLUB MARZZELLI NEWSLETTER BANNER -->
+            <section class="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto reveal">
+                <div class="relative rounded-2xl overflow-hidden bg-gradient-to-r from-brand-wineDark via-brand-wine to-brand-slate text-white p-8 sm:p-12 shadow-xl border border-brand-gold/25">
+                    <div class="absolute right-0 top-0 w-72 h-72 bg-brand-gold/10 rounded-full blur-3xl pointer-events-none"></div>
+                    <div class="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-6">
+                        <div class="text-center lg:text-left max-w-xl">
+                            <span class="inline-block bg-brand-gold/20 text-brand-goldLight border border-brand-gold/40 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest mb-3">
+                                Club Exclusivo Marzzelli
+                            </span>
+                            <h2 class="font-serif font-bold text-2xl sm:text-3xl">Obtén 10% de Descuento en tu Primera Compra</h2>
+                            <p class="text-xs sm:text-sm text-rose-100/90 mt-2">
+                                Recibe acceso anticipado a lanzamientos de temporada, ediciones limitadas en cuero vacuno y ofertas privadas.
+                            </p>
+                        </div>
+                        <form onsubmit="handleInlineNewsletter(event)" class="w-full lg:w-auto flex flex-col sm:flex-row gap-2.5">
+                            <input type="email" id="inlineNewsletterEmail" required placeholder="tu.correo@ejemplo.com" 
+                                class="w-full sm:w-72 px-4 py-3 rounded-xl bg-white/95 text-gray-800 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-brand-gold">
+                            <button type="submit" class="btn-shine bg-brand-gold hover:bg-amber-400 text-brand-slate font-bold text-xs sm:text-sm px-6 py-3 rounded-xl shadow-lg transition shrink-0">
+                                Suscribirme <i class="fas fa-paper-plane ml-1"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+            <!-- BRAND ADVANTAGES -->
+            <section class="bg-brand-slate dark:bg-brand-darkCard text-white py-12 border-t border-gray-800 dark:border-brand-darkBorder reveal">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 text-center">
+                    <div class="p-5 rounded-xl bg-white/5 border border-white/10 hover:border-brand-gold/40 transition">
+                        <i class="fas fa-truck text-2xl text-brand-gold mb-3"></i>
+                        <h4 class="font-serif font-bold text-base">Envíos a Todo el Perú</h4>
+                        <p class="text-xs text-gray-300 mt-1">Cobertura Lima Metropolitana y provincias con tracking.</p>
+                    </div>
+                    <div class="p-5 rounded-xl bg-white/5 border border-white/10 hover:border-brand-gold/40 transition">
+                        <i class="fas fa-shield-alt text-2xl text-brand-gold mb-3"></i>
+                        <h4 class="font-serif font-bold text-base">Garantía Cuero Genuino</h4>
+                        <p class="text-xs text-gray-300 mt-1">Certificado de autenticidad y sello metálico MP.</p>
+                    </div>
+                    <div class="p-5 rounded-xl bg-white/5 border border-white/10 hover:border-brand-gold/40 transition">
+                        <i class="fas fa-credit-card text-2xl text-brand-gold mb-3"></i>
+                        <h4 class="font-serif font-bold text-base">Pagos Encriptados</h4>
+                        <p class="text-xs text-gray-300 mt-1">Yape, Plin, Visa, Mastercard y Transferencias.</p>
+                    </div>
+                    <div class="p-5 rounded-xl bg-white/5 border border-white/10 hover:border-brand-gold/40 transition">
+                        <i class="fas fa-headset text-2xl text-brand-gold mb-3"></i>
+                        <h4 class="font-serif font-bold text-base">Soporte Personalizado</h4>
+                        <p class="text-xs text-gray-300 mt-1">Asesoría inmediata vía WhatsApp antes y después.</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- 2. ADMIN SAAS DASHBOARD & INVENTORY VIEW   -->
+        <!-- ========================================== -->
+        <div id="dashboardView" class="hidden bg-gray-100 dark:bg-brand-darkBg min-h-screen py-6 sm:py-8 transition-colors duration-300">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <!-- Header -->
+                <div class="flex flex-col lg:flex-row lg:items-center justify-between mb-8 gap-4">
+                    <div>
+                        <div class="flex flex-wrap items-center gap-2 mb-1">
+                            <span class="bg-brand-wine text-white text-[10px] px-2.5 py-0.5 rounded font-bold tracking-wider">SAAS ERP & CLOUD INVENTORY</span>
+                            <span class="inline-flex items-center gap-1.5 text-xs text-emerald-700 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-950/60 px-2.5 py-0.5 rounded-full font-medium">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span>
+                                Persistencia Activa
+                            </span>
+                        </div>
+                        <h1 class="text-xl sm:text-2xl font-serif font-bold text-brand-slate dark:text-white">Panel Ejecutivo Marzzelli Perú</h1>
+                    </div>
+                    
+                    <div class="flex flex-wrap items-center gap-2.5">
+                        <button onclick="requestResetDemo()" class="bg-white dark:bg-brand-darkCard border border-gray-300 dark:border-brand-darkBorder text-gray-700 dark:text-gray-200 hover:border-rose-500 hover:text-rose-600 text-xs px-3.5 py-2 rounded-lg shadow-sm transition flex items-center gap-1.5">
+                            <i class="fas fa-rotate-left"></i> Resetear Demo
+                        </button>
+                        <button onclick="toggleNewProductModal(true)" class="bg-brand-wine hover:bg-brand-wineLight text-white text-xs px-3.5 py-2 rounded-lg shadow transition font-medium flex items-center gap-1.5">
+                            <i class="fas fa-plus"></i> Nuevo Producto
+                        </button>
+                        <button onclick="toggleView('storefront')" class="bg-brand-slate dark:bg-brand-darkCard dark:border dark:border-brand-darkBorder text-white text-xs px-3.5 py-2 rounded-lg shadow hover:bg-brand-slateLight transition flex items-center gap-1.5">
+                            <i class="fas fa-store"></i> Volver a Tienda
+                        </button>
+                    </div>
+                </div>
+
+                <!-- KPI CARDS -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 mb-8">
+                    <div class="bg-white dark:bg-brand-darkCard p-5 rounded-xl shadow-sm border border-gray-200 dark:border-brand-darkBorder">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Ingresos Aprobados</p>
+                                <h3 id="kpiRevenue" class="text-2xl font-bold text-brand-slate dark:text-white mt-1">S/ 48,520.00</h3>
+                            </div>
+                            <div class="p-3 bg-rose-50 dark:bg-brand-wine/20 text-brand-wine dark:text-brand-gold rounded-lg">
+                                <i class="fas fa-coins text-xl"></i>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex items-center text-xs text-emerald-600 dark:text-emerald-400 font-medium">
+                            <i class="fas fa-check-circle mr-1"></i> Sincronizado con pasarela
+                        </div>
+                    </div>
+
+                    <div class="bg-white dark:bg-brand-darkCard p-5 rounded-xl shadow-sm border border-gray-200 dark:border-brand-darkBorder">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Órdenes Exitosas</p>
+                                <h3 id="kpiOrdersCount" class="text-2xl font-bold text-brand-slate dark:text-white mt-1">342</h3>
+                            </div>
+                            <div class="p-3 bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 rounded-lg">
+                                <i class="fas fa-box-open text-xl"></i>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex items-center text-xs text-gray-500 dark:text-gray-400">
+                            <span id="kpiFailedOrders" class="text-rose-500 font-semibold mr-1">0</span> intentos rechazados hoy
+                        </div>
+                    </div>
+
+                    <div class="bg-white dark:bg-brand-darkCard p-5 rounded-xl shadow-sm border border-gray-200 dark:border-brand-darkBorder">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Unidades en Almacén</p>
+                                <h3 id="kpiTotalStock" class="text-2xl font-bold text-brand-slate dark:text-white mt-1">0 unid.</h3>
+                            </div>
+                            <div class="p-3 bg-amber-50 dark:bg-amber-950/50 text-amber-600 dark:text-amber-400 rounded-lg">
+                                <i class="fas fa-warehouse text-xl"></i>
+                            </div>
+                        </div>
+                        <div id="kpiLowStockAlert" class="mt-4 flex items-center text-xs text-amber-600 dark:text-amber-400 font-medium">
+                            <i class="fas fa-exclamation-triangle mr-1"></i> Revisando niveles...
+                        </div>
+                    </div>
+
+                    <div class="bg-white dark:bg-brand-darkCard p-5 rounded-xl shadow-sm border border-gray-200 dark:border-brand-darkBorder">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Suscriptores Club</p>
+                                <h3 id="kpiSubscribers" class="text-2xl font-bold text-brand-slate dark:text-white mt-1">128</h3>
+                            </div>
+                            <div class="p-3 bg-purple-50 dark:bg-purple-950/50 text-purple-600 dark:text-purple-400 rounded-lg">
+                                <i class="fas fa-envelope-open-text text-xl"></i>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex items-center text-xs text-emerald-600 dark:text-emerald-400 font-medium">
+                            <i class="fas fa-tag mr-1"></i> Cupón activo: MARZZELLI10
+                        </div>
+                    </div>
+                </div>
+
+                <!-- INVENTORY MANAGEMENT TABLE -->
+                <div class="bg-white dark:bg-brand-darkCard rounded-xl shadow-sm border border-gray-200 dark:border-brand-darkBorder overflow-hidden mb-8">
+                    <div class="p-5 border-b border-gray-100 dark:border-brand-darkBorder">
+                        <h3 class="font-serif font-bold text-brand-slate dark:text-white text-base sm:text-lg">Gestión de Inventario en Tiempo Real</h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">Reabastece unidades (+5) o agota stock (con confirmación) para probar el bloqueo en tienda</p>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs whitespace-nowrap">
+                            <thead class="bg-gray-50 dark:bg-brand-darkBg text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                <tr>
+                                    <th class="py-3 px-4 font-semibold">SKU</th>
+                                    <th class="py-3 px-4 font-semibold">Producto</th>
+                                    <th class="py-3 px-4 font-semibold">Categoría</th>
+                                    <th class="py-3 px-4 font-semibold">Precio</th>
+                                    <th class="py-3 px-4 font-semibold">Stock Actual</th>
+                                    <th class="py-3 px-4 font-semibold">Estado</th>
+                                    <th class="py-3 px-4 font-semibold text-right">Acciones Rápidas</th>
+                                </tr>
+                            </thead>
+                            <tbody id="inventoryTableBody" class="divide-y divide-gray-100 dark:divide-brand-darkBorder text-gray-700 dark:text-gray-300"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- TRANSACTION LOGS TABLE -->
+                <div class="bg-white dark:bg-brand-darkCard rounded-xl shadow-sm border border-gray-200 dark:border-brand-darkBorder overflow-hidden mb-8">
+                    <div class="p-5 border-b border-gray-100 dark:border-brand-darkBorder">
+                        <h3 class="font-serif font-bold text-brand-slate dark:text-white text-base sm:text-lg">Bitácora de Transacciones & Pedidos</h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">Auditoría automática de compras aprobadas e intentos rechazados</p>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs whitespace-nowrap">
+                            <thead class="bg-gray-50 dark:bg-brand-darkBg text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                <tr>
+                                    <th class="py-3 px-4 font-semibold">N° Transacción</th>
+                                    <th class="py-3 px-4 font-semibold">Cliente</th>
+                                    <th class="py-3 px-4 font-semibold">Detalle / Método</th>
+                                    <th class="py-3 px-4 font-semibold">Total</th>
+                                    <th class="py-3 px-4 font-semibold">Resultado</th>
+                                    <th class="py-3 px-4 font-semibold">Hora</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ordersTableBody" class="divide-y divide-gray-100 dark:divide-brand-darkBorder text-gray-700 dark:text-gray-300"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- CHARTS -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="lg:col-span-2 bg-white dark:bg-brand-darkCard p-5 rounded-xl shadow-sm border border-gray-200 dark:border-brand-darkBorder">
+                        <h3 class="font-serif font-bold text-brand-slate dark:text-white text-base mb-4">Evolución de Ventas 2026 (S/)</h3>
+                        <div class="h-60 relative"><canvas id="salesChart"></canvas></div>
+                    </div>
+                    <div class="bg-white dark:bg-brand-darkCard p-5 rounded-xl shadow-sm border border-gray-200 dark:border-brand-darkBorder">
+                        <h3 class="font-serif font-bold text-brand-slate dark:text-white text-base mb-4">Stock por Categoría</h3>
+                        <div class="h-60 relative"><canvas id="categoryChart"></canvas></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- ========================================== -->
+    <!-- MODAL 1: NEWSLETTER / 10% DISCOUNT POPUP   -->
+    <!-- ========================================== -->
+    <div id="newsletterModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-black/70 backdrop-blur-xs" onclick="closeNewsletterModal()"></div>
+        <div class="modal-pop relative bg-white dark:bg-brand-darkCard rounded-2xl max-w-xl w-full overflow-hidden shadow-2xl border border-gray-200 dark:border-brand-darkBorder z-10 grid grid-cols-1 sm:grid-cols-5">
+            <button onclick="closeNewsletterModal()" aria-label="Cerrar suscripción" class="absolute top-3 right-3 bg-black/40 hover:bg-brand-wine text-white w-8 h-8 rounded-full flex items-center justify-center transition z-20">
+                <i class="fas fa-times text-xs"></i>
+            </button>
+
+            <!-- Visual Side -->
+            <div class="hidden sm:flex sm:col-span-2 bg-gradient-to-b from-brand-slate to-brand-wineDark text-white p-6 flex-col justify-between relative overflow-hidden">
+                <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-brand-gold/20 rounded-full blur-2xl"></div>
+                <svg class="w-12 h-12 drop-shadow" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="50" cy="50" r="47" fill="#2A2D34" stroke="#D4AF37" stroke-width="5"/>
+                    <text x="50" y="61" font-family="Cinzel, Georgia, serif" font-weight="700" font-size="35" fill="#D4AF37" text-anchor="middle">MP</text>
+                </svg>
+                <div class="relative z-10">
+                    <span class="text-brand-gold font-serif text-3xl font-bold block">10% OFF</span>
+                    <p class="text-[11px] text-gray-200 mt-1 leading-relaxed">Exclusivo para nuevos miembros de nuestra comunidad de cuero genuino.</p>
+                </div>
+            </div>
+
+            <!-- Form Side -->
+            <div class="sm:col-span-3 p-6">
+                <div id="nlFormState">
+                    <span class="text-[10px] font-bold uppercase tracking-widest text-brand-wine dark:text-brand-gold">Bienvenida VIP</span>
+                    <h3 class="font-serif font-bold text-xl text-brand-slate dark:text-white mt-1">Únete al Club Marzzelli</h3>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1.5">Suscríbete a nuestro boletín y recibe de inmediato tu código de descuento para usar en el carrito.</p>
+
+                    <form onsubmit="handleNewsletterSubmit(event)" class="mt-4 space-y-3 text-xs">
+                        <div>
+                            <label class="block font-semibold mb-1 dark:text-gray-300">Nombre</label>
+                            <input type="text" id="nlName" required placeholder="Ej. Paco Ramos" class="w-full rounded-lg border border-gray-300 dark:border-brand-darkBorder bg-gray-50 dark:bg-brand-darkBg p-2.5 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-wine">
+                        </div>
+                        <div>
+                            <label class="block font-semibold mb-1 dark:text-gray-300">Correo electrónico</label>
+                            <input type="email" id="nlEmail" required placeholder="tu.correo@ejemplo.com" class="w-full rounded-lg border border-gray-300 dark:border-brand-darkBorder bg-gray-50 dark:bg-brand-darkBg p-2.5 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-wine">
+                        </div>
+                        <label class="flex items-start gap-2 text-[11px] text-gray-500 dark:text-gray-400 cursor-pointer pt-1">
+                            <input type="checkbox" required checked class="mt-0.5 accent-brand-wine">
+                            <span>Acepto recibir novedades y promociones de Industrias Marzzelli Perú Cueros EIRL.</span>
+                        </label>
+                        <button type="submit" class="btn-shine w-full bg-brand-wine hover:bg-brand-wineLight text-white font-semibold py-3 rounded-lg shadow transition">
+                            Obtener mi 10% de Descuento
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Success Coupon State -->
+                <div id="nlSuccessState" class="hidden text-center py-3 space-y-3.5">
+                    <div class="w-12 h-12 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mx-auto text-xl">
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <h4 class="font-serif font-bold text-lg text-brand-slate dark:text-white">¡Bienvenido al Club!</h4>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">Usa este código en tu carrito para activar tu 10% OFF:</p>
+                    <div class="bg-gray-100 dark:bg-brand-darkBg border-2 border-dashed border-brand-gold rounded-xl py-3 px-4 flex items-center justify-between">
+                        <span class="font-mono font-bold text-base tracking-widest text-brand-wine dark:text-brand-gold">MARZZELLI10</span>
+                        <button onclick="applyPromoCodeDirect('MARZZELLI10'); closeNewsletterModal();" class="bg-brand-slate dark:bg-brand-wine text-white text-[11px] px-3 py-1.5 rounded-lg font-semibold hover:opacity-90 transition">
+                            Aplicar ya
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL 2: QUICK VIEW PRODUCT MODAL          -->
+    <!-- ========================================== -->
+    <div id="quickViewModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-black/70 backdrop-blur-xs" onclick="closeQuickView()"></div>
+        <div class="modal-pop relative bg-white dark:bg-brand-darkCard rounded-2xl max-w-2xl w-full overflow-hidden shadow-2xl border border-gray-200 dark:border-brand-darkBorder z-10 grid grid-cols-1 md:grid-cols-2 max-h-[90vh] overflow-y-auto">
+            <button onclick="closeQuickView()" class="absolute top-3 right-3 bg-black/50 text-white hover:bg-brand-wine w-8 h-8 rounded-full flex items-center justify-center transition z-20">
+                <i class="fas fa-times text-sm"></i>
+            </button>
+            <div class="bg-gray-100 dark:bg-brand-darkBg h-64 md:h-full relative">
+                <img id="qvImage" src="" alt="" class="w-full h-full object-cover">
+                <div class="absolute top-3 left-3 w-9 h-9 rounded-full bg-brand-slate/90 border border-brand-gold flex items-center justify-center shadow">
+                    <span class="font-serif font-bold text-[11px] text-brand-gold">MP</span>
+                </div>
+            </div>
+            <div class="p-6 flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between gap-2 mb-2">
+                        <span id="qvTag" class="inline-block bg-brand-wine text-white text-[10px] font-bold px-2.5 py-1 rounded uppercase tracking-wider"></span>
+                        <span id="qvStockBadge" class="text-xs font-semibold"></span>
+                    </div>
+                    <h3 id="qvName" class="font-serif font-bold text-xl text-brand-slate dark:text-white"></h3>
+                    <p id="qvSku" class="text-[11px] text-gray-400 uppercase mt-0.5"></p>
+                    <p id="qvPrice" class="text-2xl font-bold text-brand-wine dark:text-brand-gold mt-3"></p>
+                    <p id="qvDescription" class="text-xs sm:text-sm text-gray-600 dark:text-gray-300 mt-3 leading-relaxed"></p>
+                    <ul class="mt-4 space-y-1.5 text-xs text-gray-500 dark:text-gray-400 border-t border-gray-100 dark:border-brand-darkBorder pt-3">
+                        <li><i class="fas fa-check text-emerald-500 mr-1.5"></i> 100% Cuero peruano certificado</li>
+                        <li><i class="fas fa-check text-emerald-500 mr-1.5"></i> Incluye emblema metálico oficial MP</li>
+                        <li><i class="fas fa-check text-emerald-500 mr-1.5"></i> Garantía de costura por 12 meses</li>
+                    </ul>
+                </div>
+                <button id="qvAddBtn" class="mt-6 w-full bg-brand-slate dark:bg-brand-wine hover:bg-brand-wine dark:hover:bg-brand-wineLight text-white font-semibold py-3 rounded-xl shadow transition flex items-center justify-center gap-2 text-sm">
+                    <i class="fas fa-shopping-bag"></i> Agregar al Carrito
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL 3: CUSTOM CONFIRMATION MODAL         -->
+    <!-- ========================================== -->
+    <div id="confirmModal" class="fixed inset-0 z-[60] hidden flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-black/70 backdrop-blur-xs" onclick="closeConfirmModal()"></div>
+        <div class="modal-pop relative bg-white dark:bg-brand-darkCard rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-gray-200 dark:border-brand-darkBorder z-10 text-center space-y-4">
+            <div id="confirmIconBox" class="w-14 h-14 rounded-full mx-auto flex items-center justify-center text-2xl bg-amber-100 text-amber-600">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <div>
+                <h3 id="confirmTitle" class="font-serif font-bold text-lg text-brand-slate dark:text-white">¿Confirmar acción?</h3>
+                <p id="confirmMessage" class="text-xs text-gray-500 dark:text-gray-400 mt-1.5 leading-relaxed"></p>
+            </div>
+            <div class="flex gap-2.5 justify-center pt-2">
+                <button onclick="closeConfirmModal()" class="flex-1 px-4 py-2.5 rounded-xl border border-gray-300 dark:border-brand-darkBorder text-gray-700 dark:text-gray-300 text-xs font-semibold hover:bg-gray-100 dark:hover:bg-brand-darkBg transition">
+                    Cancelar
+                </button>
+                <button id="confirmActionBtn" class="flex-1 px-4 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold shadow transition">
+                    Aceptar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL 4: SIMULATED PAYMENT GATEWAY         -->
+    <!-- ========================================== -->
+    <div id="checkoutModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-black/75 backdrop-blur-xs" onclick="requestCancelCheckout()"></div>
+        <div class="modal-pop relative bg-white dark:bg-brand-darkCard rounded-2xl max-w-lg w-full overflow-hidden shadow-2xl border border-gray-200 dark:border-brand-darkBorder z-10 max-h-[92vh] overflow-y-auto">
+            
+            <div class="bg-brand-slate dark:bg-black text-white px-6 py-4 flex justify-between items-center">
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-lock text-emerald-400"></i>
+                    <h3 class="font-serif font-bold text-base">Pasarela de Pago Simulada (Sandbox)</h3>
+                </div>
+                <button onclick="requestCancelCheckout()" class="text-gray-300 hover:text-white"><i class="fas fa-times"></i></button>
+            </div>
+
+            <form id="paymentForm" onsubmit="processSimulatedPayment(event)" class="p-6 space-y-4 text-xs">
+                <div class="bg-gray-50 dark:bg-brand-darkBg p-4 rounded-xl border border-gray-200 dark:border-brand-darkBorder flex justify-between items-center">
+                    <div>
+                        <span class="text-gray-500 dark:text-gray-400 block">Total final a procesar</span>
+                        <span id="checkoutTotalDisplay" class="text-xl font-bold text-brand-wine dark:text-brand-gold">S/ 0.00</span>
+                        <span id="checkoutPromoInfo" class="hidden text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold block"></span>
+                    </div>
+                    <span class="bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 px-2.5 py-1 rounded-full font-semibold">TLS 1.3 • Cloud Pay</span>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-semibold mb-1 dark:text-gray-300">Nombre del Cliente</label>
+                        <input type="text" id="custName" required value="Paco Ramos" class="w-full rounded-lg border border-gray-300 dark:border-brand-darkBorder bg-white dark:bg-brand-darkBg p-2.5 dark:text-white">
+                    </div>
+                    <div>
+                        <label class="block font-semibold mb-1 dark:text-gray-300">Método de Pago</label>
+                        <select id="payMethod" class="w-full rounded-lg border border-gray-300 dark:border-brand-darkBorder bg-white dark:bg-brand-darkBg p-2.5 dark:text-white">
+                            <option value="Tarjeta Visa **** 4532">Tarjeta Crédito / Débito</option>
+                            <option value="Yape / Plin QR">Yape / Plin Instantáneo</option>
+                            <option value="Transferencia BCP">Transferencia Bancaria</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Scenario Simulator -->
+                <div class="p-3.5 rounded-xl bg-amber-50/90 dark:bg-amber-950/30 border border-amber-300 dark:border-amber-800/60 space-y-2">
+                    <label class="font-bold text-amber-900 dark:text-amber-300 flex items-center gap-1.5">
+                        <i class="fas fa-flask"></i> Simulador de Respuesta de Pasarela (Para Demo):
+                    </label>
+                    <select id="simulationOutcome" class="w-full rounded-lg border border-amber-300 dark:border-amber-700 bg-white dark:bg-brand-darkBg p-2.5 font-medium dark:text-white">
+                        <option value="SUCCESS">✅ Compra Exitosa (Aprueba pago, descuenta stock y emite boleta)</option>
+                        <option value="DECLINED_FUNDS">❌ Compra Incorrecta: Fondos insuficientes / Tarjeta rechazada</option>
+                        <option value="GATEWAY_TIMEOUT">⚠️ Compra Incorrecta: Timeout de conexión con el banco (HTTP 504)</option>
+                        <option value="STOCK_CONFLICT">🚫 Compra Incorrecta: Quiebre de stock concurrente</option>
+                    </select>
+                </div>
+
+                <label class="flex items-start gap-2 text-[11px] text-gray-500 dark:text-gray-400 cursor-pointer">
+                    <input type="checkbox" required checked class="mt-0.5 accent-brand-wine">
+                    <span>Acepto los términos de compra y política de devoluciones de Industrias Marzzelli Perú Cueros EIRL.</span>
+                </label>
+
+                <div class="pt-2 flex justify-end gap-2">
+                    <button type="button" onclick="requestCancelCheckout()" class="px-4 py-2.5 rounded-lg border border-gray-300 dark:border-brand-darkBorder text-gray-600 dark:text-gray-300 font-medium hover:bg-gray-100 dark:hover:bg-brand-darkBg transition">Cancelar Compra</button>
+                    <button type="submit" id="paySubmitBtn" class="btn-shine px-5 py-2.5 rounded-lg bg-brand-wine hover:bg-brand-wineLight text-white font-semibold shadow flex items-center gap-2">
+                        <i class="fas fa-credit-card"></i> Confirmar y Pagar
+                    </button>
+                </div>
+            </form>
+
+            <!-- Result View -->
+            <div id="paymentResultView" class="hidden p-6 text-center space-y-4">
+                <div id="resultIconContainer" class="w-16 h-16 rounded-full mx-auto flex items-center justify-center text-3xl"></div>
+                <div>
+                    <h4 id="resultTitle" class="font-serif font-bold text-xl"></h4>
+                    <p id="resultSubtitle" class="text-xs text-gray-500 dark:text-gray-400 mt-1"></p>
+                </div>
+                <div id="resultDetailsBox" class="text-left bg-gray-50 dark:bg-brand-darkBg p-4 rounded-xl border border-gray-200 dark:border-brand-darkBorder text-xs space-y-1.5"></div>
+                <div id="resultActions" class="flex flex-col sm:flex-row gap-2 justify-center pt-2"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL 5: NEW PRODUCT ADMIN MODAL           -->
+    <!-- ========================================== -->
+    <div id="newProductModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-xs" onclick="toggleNewProductModal(false)"></div>
+        <div class="modal-pop relative bg-white dark:bg-brand-darkCard rounded-2xl max-w-md w-full p-6 shadow-2xl border border-gray-200 dark:border-brand-darkBorder z-10">
+            <div class="flex justify-between items-center pb-3 border-b border-gray-200 dark:border-brand-darkBorder">
+                <h3 class="font-serif font-bold text-lg text-brand-slate dark:text-white">Registrar Producto en Almacén</h3>
+                <button onclick="toggleNewProductModal(false)" class="text-gray-400 hover:text-gray-600"><i class="fas fa-times"></i></button>
+            </div>
+            <form onsubmit="handleAddProduct(event)" class="mt-4 space-y-3 text-xs">
+                <div>
+                    <label class="block font-semibold mb-1 dark:text-gray-300">Nombre del Artículo</label>
+                    <input type="text" id="npName" required placeholder="Ej. Maletín Ejecutivo Cuero Vino" class="w-full rounded-lg border border-gray-300 dark:border-brand-darkBorder bg-gray-50 dark:bg-brand-darkBg p-2.5 dark:text-white">
+                </div>
+                <div class="grid grid-cols-3 gap-2">
+                    <div>
+                        <label class="block font-semibold mb-1 dark:text-gray-300">Categoría</label>
+                        <select id="npCategory" class="w-full rounded-lg border border-gray-300 dark:border-brand-darkBorder bg-gray-50 dark:bg-brand-darkBg p-2.5 dark:text-white">
+                            <option value="damas">Damas</option>
+                            <option value="caballeros">Caballeros</option>
+                            <option value="textil">Cuero & Textil</option>
+                            <option value="calzado">Calzado</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block font-semibold mb-1 dark:text-gray-300">Precio (S/)</label>
+                        <input type="number" id="npPrice" required min="10" step="0.10" placeholder="250.00" class="w-full rounded-lg border border-gray-300 dark:border-brand-darkBorder bg-gray-50 dark:bg-brand-darkBg p-2.5 dark:text-white">
+                    </div>
+                    <div>
+                        <label class="block font-semibold mb-1 dark:text-gray-300">Stock Inicial</label>
+                        <input type="number" id="npStock" required min="1" value="10" class="w-full rounded-lg border border-gray-300 dark:border-brand-darkBorder bg-gray-50 dark:bg-brand-darkBg p-2.5 dark:text-white">
+                    </div>
+                </div>
+                <div>
+                    <label class="block font-semibold mb-1 dark:text-gray-300">Descripción</label>
+                    <textarea id="npDesc" rows="2" required placeholder="Especificaciones del material..." class="w-full rounded-lg border border-gray-300 dark:border-brand-darkBorder bg-gray-50 dark:bg-brand-darkBg p-2.5 dark:text-white"></textarea>
+                </div>
+                <div class="pt-2 flex justify-end gap-2">
+                    <button type="button" onclick="toggleNewProductModal(false)" class="px-4 py-2 rounded-lg border border-gray-300 dark:border-brand-darkBorder text-gray-600 dark:text-gray-300">Cancelar</button>
+                    <button type="submit" class="px-4 py-2 rounded-lg bg-brand-wine hover:bg-brand-wineLight text-white font-semibold">Guardar en Cloud</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- SHOPPING CART DRAWER (WITH PROMO CODE)     -->
+    <!-- ========================================== -->
+    <div id="cartDrawer" class="fixed inset-0 overflow-hidden z-50 hidden">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-xs" onclick="toggleCartDrawer()"></div>
+        <div class="fixed inset-y-0 right-0 max-w-full flex">
+            <div class="w-screen max-w-full sm:max-w-md bg-white dark:bg-brand-darkCard shadow-2xl flex flex-col border-l border-gray-200 dark:border-brand-darkBorder">
+                <div class="p-4 bg-brand-slate dark:bg-black text-white flex justify-between items-center">
+                    <h2 class="font-serif font-bold text-base sm:text-lg flex items-center gap-2">
+                        <i class="fas fa-shopping-bag text-brand-gold"></i> Carrito de Compras
+                    </h2>
+                    <div class="flex items-center gap-2">
+                        <button onclick="requestClearCart()" title="Vaciar carrito" class="text-[11px] text-rose-300 hover:text-rose-200 px-2 py-1 rounded border border-white/15">
+                            <i class="fas fa-trash-can mr-1"></i>Vaciar
+                        </button>
+                        <button onclick="toggleCartDrawer()" class="text-gray-300 hover:text-white p-1"><i class="fas fa-times text-lg"></i></button>
+                    </div>
+                </div>
+
+                <div id="cartItemsContainer" class="flex-grow p-4 overflow-y-auto space-y-4"></div>
+
+                <!-- Promo Code & Totals -->
+                <div class="p-4 border-t border-gray-200 dark:border-brand-darkBorder bg-gray-50 dark:bg-brand-darkBg space-y-3">
+                    <!-- Coupon Input -->
+                    <div class="flex gap-1.5">
+                        <input type="text" id="promoCodeInput" placeholder="Cupón (ej. MARZZELLI10)" class="flex-grow text-xs rounded-lg border border-gray-300 dark:border-brand-darkBorder bg-white dark:bg-brand-darkCard px-3 py-2 uppercase dark:text-white focus:outline-none focus:ring-1 focus:ring-brand-wine">
+                        <button onclick="applyPromoCodeFromInput()" class="bg-brand-slate dark:bg-brand-darkCard border border-transparent dark:border-brand-darkBorder hover:bg-brand-wine text-white text-xs px-3.5 py-2 rounded-lg font-medium transition">
+                            Aplicar
+                        </button>
+                    </div>
+                    <div id="activeCouponBadge" class="hidden flex items-center justify-between text-[11px] bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 px-2.5 py-1.5 rounded-lg border border-emerald-200 dark:border-emerald-800">
+                        <span><i class="fas fa-tag mr-1"></i> Cupón <strong>MARZZELLI10</strong> (-10%) activo</span>
+                        <button onclick="removePromoCode()" class="hover:text-rose-500 font-bold"><i class="fas fa-times"></i></button>
+                    </div>
+
+                    <div class="space-y-1 text-xs">
+                        <div class="flex justify-between text-gray-500 dark:text-gray-400">
+                            <span>Subtotal:</span>
+                            <span id="cartRawSubtotal">S/ 0.00</span>
+                        </div>
+                        <div id="cartDiscountRow" class="hidden flex justify-between text-emerald-600 dark:text-emerald-400 font-medium">
+                            <span>Descuento Club (10%):</span>
+                            <span id="cartDiscountAmount">- S/ 0.00</span>
+                        </div>
+                        <div class="flex justify-between text-gray-500 dark:text-gray-400">
+                            <span>IGV (18% incluido):</span>
+                            <span id="cartIgv">S/ 0.00</span>
+                        </div>
+                        <div class="flex justify-between text-sm font-bold text-gray-800 dark:text-white pt-1.5 border-t border-gray-200 dark:border-brand-darkBorder">
+                            <span>Total a Pagar:</span>
+                            <span id="cartSubtotal" class="text-brand-wine dark:text-brand-gold text-base">S/ 0.00</span>
+                        </div>
+                    </div>
+
+                    <button onclick="openCheckoutModal()" class="btn-shine w-full bg-brand-wine hover:bg-brand-wineLight text-white font-semibold py-3 rounded-xl shadow transition flex items-center justify-center gap-2 text-sm">
+                        <i class="fas fa-credit-card"></i> Proceder al Pago (Simulador)
+                    </button>
+                    <button onclick="checkoutWhatsApp()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2.5 rounded-xl transition flex items-center justify-center gap-2 text-xs">
+                        <i class="fab fa-whatsapp text-base"></i> Cotizar Directo por WhatsApp
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- COOKIE & PRIVACY ACCEPTANCE BANNER -->
+    <div id="cookieBanner" class="hidden fixed bottom-4 left-4 right-4 sm:right-auto sm:max-w-md z-40 bg-white/95 dark:bg-brand-darkCard/95 backdrop-blur-md border border-gray-200 dark:border-brand-darkBorder shadow-2xl rounded-2xl p-4 text-xs">
+        <div class="flex items-start gap-3">
+            <div class="p-2 rounded-lg bg-brand-wine/10 text-brand-wine dark:text-brand-gold shrink-0">
+                <i class="fas fa-cookie-bite text-base"></i>
+            </div>
+            <div class="space-y-2.5">
+                <p class="text-gray-600 dark:text-gray-300 leading-relaxed">
+                    Usamos almacenamiento local para guardar tu carrito, preferencia de tema y simulación de inventario en la nube.
+                </p>
+                <div class="flex gap-2">
+                    <button onclick="acceptCookies('all')" class="bg-brand-wine hover:bg-brand-wineLight text-white px-3.5 py-1.5 rounded-lg font-semibold transition">Aceptar Todo</button>
+                    <button onclick="acceptCookies('essential')" class="border border-gray-300 dark:border-brand-darkBorder text-gray-600 dark:text-gray-300 px-3 py-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-brand-darkBg transition">Solo Esenciales</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST CONTAINER -->
+    <div id="toastContainer" class="fixed bottom-20 right-4 sm:right-6 z-50 space-y-2 pointer-events-none"></div>
+
+    <!-- FLOATING WHATSAPP -->
+    <a href="https://wa.me/51987654321?text=Hola!%20Consulta%20desde%20la%20web%20Marzzelli" target="_blank" aria-label="WhatsApp"
+       class="fixed bottom-5 right-5 bg-emerald-500 text-white p-3.5 sm:p-4 rounded-full shadow-2xl whatsapp-pulse hover:bg-emerald-600 transition z-40 flex items-center justify-center">
+        <i class="fab fa-whatsapp text-2xl"></i>
+    </a>
+
+    <!-- FOOTER -->
+    <footer class="bg-brand-slate dark:bg-black text-white border-t border-gray-800 dark:border-brand-darkBorder mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col sm:flex-row justify-between items-center text-xs text-gray-400 gap-4">
+            <div class="flex items-center gap-2.5">
+                <svg class="w-8 h-8 shrink-0" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="50" cy="50" r="47" fill="#2A2D34" stroke="#D4AF37" stroke-width="5"/>
+                    <text x="50" y="62" font-family="Cinzel, Georgia, serif" font-weight="700" font-size="36" fill="#D4AF37" text-anchor="middle">MP</text>
+                </svg>
+                <span>© 2026 INDUSTRIAS MARZZELLI PERÚ CUEROS E.I.R.L.</span>
+            </div>
+            <div class="flex items-center gap-4">
+                <button onclick="openNewsletterModal()" class="text-brand-gold hover:underline">Suscripción 10% OFF</button>
+                <span>•</span>
+                <span>Cloud Computing & Arquitecturas Digitales</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ========================================== -->
+    <!-- JAVASCRIPT STATE & INTERACTION ENGINE      -->
+    <!-- ========================================== -->
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
+        const DEFAULT_PRODUCTS = [
+            { id: 1, sku: 'MZ-001', name: 'Cartera Executive Marzzelli', category: 'damas', price: 289.00, stock: 6, image: 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=600&q=80', tag: 'Bestseller', description: '100% Cuero vacuno con compartimento acolchado para laptop y sello metálico oficial MP.' },
+            { id: 2, sku: 'MZ-002', name: 'Billetera Clásica Marrón', category: 'caballeros', price: 89.00, stock: 14, image: 'https://images.unsplash.com/photo-1627123424574-724758594e93?auto=format&fit=crop&w=600&q=80', tag: 'Popular', description: 'Cuero legítimo grabado con múltiples tarjeteros y protección RFID.' },
+            { id: 3, sku: 'MZ-003', name: 'Mochila Ejecutiva Textil & Cuero', category: 'textil', price: 249.00, stock: 3, image: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=600&q=80', tag: 'Stock Bajo', description: 'Lona textil impermeable combinada con acabados en cuero genuino.' },
+            { id: 4, sku: 'MZ-004', name: 'Calzado Mocasín Formal Cuero', category: 'calzado', price: 279.00, stock: 8, image: 'https://images.unsplash.com/photo-1614252235316-8c857d38b5f4?auto=format&fit=crop&w=600&q=80', tag: 'Premium', description: 'Suela confort antideslizante con plantilla anatómica artesanal.' },
+            { id: 5, sku: 'MZ-005', name: 'Morral Urbano de Cuero', category: 'caballeros', price: 179.00, stock: 5, image: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=600&q=80', tag: 'Oferta', description: 'Correa ajustable ergonómica y cierres metálicos reforzados.' },
+            { id: 6, sku: 'MZ-006', name: 'Monedero Tarjetero Damas', category: 'damas', price: 65.00, stock: 0, image: 'https://images.unsplash.com/photo-1606503153255-59d8b8b82176?auto=format&fit=crop&w=600&q=80', tag: 'Agotado', description: 'Diseño compacto en cuero flor con cierre perimetral.' },
+            { id: 7, sku: 'MZ-007', name: 'Correa Vestir Cuero Genuino', category: 'caballeros', price: 95.00, stock: 11, image: 'https://images.unsplash.com/photo-1624222247344-550fb60583dc?auto=format&fit=crop&w=600&q=80', tag: 'Infaltable', description: 'Hebilla metálica satinada antioxidante y doble costura.' },
+            { id: 8, sku: 'MZ-008', name: 'Bolso Casual Combinado Textil', category: 'textil', price: 199.00, stock: 4, image: 'https://images.unsplash.com/photo-1590874103328-eac38a683ce7?auto=format&fit=crop&w=600&q=80', tag: 'Tendencia', description: 'Lona estructurada con asas y base de cuero legítimo.' }
+        ];
+
+        const DEFAULT_ORDERS = [
+            { id: '#MZ-8901', customer: 'María Fernández', detail: 'Cartera Executive • Visa', total: 289.00, status: 'APROBADO', reason: 'Pago confirmado', time: 'Hoy, 18:15' },
+            { id: '#MZ-8902', customer: 'Carlos Mendoza', detail: 'Billetera Clásica • Yape', total: 89.00, status: 'APROBADO', reason: 'Pago confirmado', time: 'Hoy, 19:40' }
+        ];
+
+        // Persisted State
+        let productsData = JSON.parse(localStorage.getItem('mz_products')) || structuredClone(DEFAULT_PRODUCTS);
+        let ordersData = JSON.parse(localStorage.getItem('mz_orders')) || structuredClone(DEFAULT_ORDERS);
+        let baseRevenue = parseFloat(localStorage.getItem('mz_revenue')) || 48520.00;
+        let subscribersCount = parseInt(localStorage.getItem('mz_subscribers'), 10) || 128;
+        let cart = [];
+        let appliedDiscountRate = 0; // 0.10 when MARZZELLI10 active
+        let activeCategory = 'all';
+        let currentView = 'storefront';
+        let salesChartInstance = null;
+        let categoryChartInstance = null;
+
+        function saveState() {
+            localStorage.setItem('mz_products', JSON.stringify(productsData));
+            localStorage.setItem('mz_orders', JSON.stringify(ordersData));
+            localStorage.setItem('mz_revenue', baseRevenue.toString());
+            localStorage.setItem('mz_subscribers', subscribersCount.toString());
+        }
+
+        window.onload = function() {
+            syncThemeIcon();
+            renderProducts();
+            updateCartUI();
+            initDashboardCharts();
+            renderDashboardData();
+            initScrollReveal();
+
+            // Mostrar aviso de cookies si no se aceptó antes
+            if (!localStorage.getItem('mz_cookies_accepted')) {
+                setTimeout(() => document.getElementById('cookieBanner').classList.remove('hidden'), 1200);
+            }
+
+            // Mostrar popup de suscripción 10% OFF tras 4.5s (solo si no se suscribió/cerró en esta sesión)
+            if (!sessionStorage.getItem('mz_nl_seen') && !localStorage.getItem('mz_nl_subscribed')) {
+                setTimeout(() => {
+                    if (currentView === 'storefront') openNewsletterModal();
+                }, 4500);
+            }
+        };
+
+        // SCROLL REVEAL OBSERVER
+        function initScrollReveal() {
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
+                        entry.target.classList.add('reveal-visible');
                     }
                 });
-            }, {
-                threshold: 0.1
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        }
+
+        function fireCelebration() {
+            if (typeof confetti === 'function') {
+                confetti({
+                    particleCount: 75,
+                    spread: 65,
+                    origin: { y: 0.6 },
+                    colors: ['#6B0D23', '#D4AF37', '#F3E5AB', '#10B981']
+                });
+            }
+        }
+
+        // ==========================================
+        // REUSABLE CONFIRMATION MODAL SYSTEM
+        // ==========================================
+        function openConfirmModal({ title, message, confirmText = 'Aceptar', type = 'danger', onConfirm }) {
+            const modal = document.getElementById('confirmModal');
+            const iconBox = document.getElementById('confirmIconBox');
+            const btn = document.getElementById('confirmActionBtn');
+
+            document.getElementById('confirmTitle').textContent = title;
+            document.getElementById('confirmMessage').textContent = message;
+            btn.textContent = confirmText;
+
+            if (type === 'danger') {
+                iconBox.className = 'w-14 h-14 rounded-full mx-auto flex items-center justify-center text-2xl bg-rose-100 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400';
+                iconBox.innerHTML = '<i class="fas fa-trash-can"></i>';
+                btn.className = 'flex-1 px-4 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold shadow transition';
+            } else {
+                iconBox.className = 'w-14 h-14 rounded-full mx-auto flex items-center justify-center text-2xl bg-amber-100 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400';
+                iconBox.innerHTML = '<i class="fas fa-exclamation-triangle"></i>';
+                btn.className = 'flex-1 px-4 py-2.5 rounded-xl bg-brand-wine hover:bg-brand-wineLight text-white text-xs font-semibold shadow transition';
+            }
+
+            btn.onclick = function() {
+                closeConfirmModal();
+                if (typeof onConfirm === 'function') onConfirm();
+            };
+
+            modal.classList.remove('hidden');
+        }
+
+        function closeConfirmModal() {
+            document.getElementById('confirmModal').classList.add('hidden');
+        }
+
+        // COOKIE CONSENT
+        function acceptCookies(level) {
+            localStorage.setItem('mz_cookies_accepted', level);
+            document.getElementById('cookieBanner').classList.add('hidden');
+            showToast(level === 'all' ? 'Preferencias de privacidad guardadas.' : 'Solo cookies esenciales activas.');
+        }
+
+        // ==========================================
+        // NEWSLETTER & PROMO COUPON SYSTEM
+        // ==========================================
+        function openNewsletterModal() {
+            sessionStorage.setItem('mz_nl_seen', '1');
+            document.getElementById('nlFormState').classList.remove('hidden');
+            document.getElementById('nlSuccessState').classList.add('hidden');
+            document.getElementById('newsletterModal').classList.remove('hidden');
+        }
+
+        function closeNewsletterModal() {
+            document.getElementById('newsletterModal').classList.add('hidden');
+        }
+
+        function handleNewsletterSubmit(e) {
+            e.preventDefault();
+            subscribersCount += 1;
+            localStorage.setItem('mz_nl_subscribed', '1');
+            saveState();
+            renderDashboardData();
+
+            document.getElementById('nlFormState').classList.add('hidden');
+            document.getElementById('nlSuccessState').classList.remove('hidden');
+            fireCelebration();
+            showToast('¡Suscripción confirmada! Cupón MARZZELLI10 desbloqueado.');
+        }
+
+        function handleInlineNewsletter(e) {
+            e.preventDefault();
+            subscribersCount += 1;
+            localStorage.setItem('mz_nl_subscribed', '1');
+            saveState();
+            renderDashboardData();
+            e.target.reset();
+            applyPromoCodeDirect('MARZZELLI10');
+            fireCelebration();
+        }
+
+        function applyPromoCodeFromInput() {
+            const code = document.getElementById('promoCodeInput').value.trim().toUpperCase();
+            applyPromoCodeDirect(code);
+        }
+
+        function applyPromoCodeDirect(code) {
+            if (code === 'MARZZELLI10') {
+                appliedDiscountRate = 0.10;
+                document.getElementById('promoCodeInput').value = 'MARZZELLI10';
+                document.getElementById('activeCouponBadge').classList.remove('hidden');
+                updateCartUI();
+                showToast('Cupón MARZZELLI10 aplicado (-10% en tu carrito).');
+            } else {
+                showToast('Cupón inválido. Prueba con MARZZELLI10.', true);
+            }
+        }
+
+        function removePromoCode() {
+            appliedDiscountRate = 0;
+            document.getElementById('promoCodeInput').value = '';
+            document.getElementById('activeCouponBadge').classList.add('hidden');
+            updateCartUI();
+            showToast('Cupón retirado.');
+        }
+
+        // THEME
+        function toggleTheme() {
+            document.documentElement.classList.toggle('dark');
+            const isDark = document.documentElement.classList.contains('dark');
+            localStorage.setItem('marzzelli-theme', isDark ? 'dark' : 'light');
+            syncThemeIcon();
+            updateChartsTheme();
+        }
+
+        function syncThemeIcon() {
+            const isDark = document.documentElement.classList.contains('dark');
+            const icon = document.getElementById('themeIcon');
+            icon.className = isDark ? 'fas fa-sun text-sm sm:text-base w-4 h-4 flex items-center justify-center' : 'fas fa-moon text-sm sm:text-base w-4 h-4 flex items-center justify-center';
+        }
+
+        // ==========================================
+        // STOREFRONT RENDER & QUICK VIEW
+        // ==========================================
+        function renderProducts(customList = null) {
+            const grid = document.getElementById('productGrid');
+            const items = customList || (activeCategory === 'all' ? productsData : productsData.filter(p => p.category === activeCategory));
+            grid.innerHTML = '';
+
+            if (items.length === 0) {
+                grid.innerHTML = `<div class="col-span-full text-center py-12 text-gray-500">No hay artículos que coincidan con tu búsqueda.</div>`;
+                return;
+            }
+
+            items.forEach(product => {
+                const isOut = product.stock <= 0;
+                const isLow = product.stock > 0 && product.stock <= 3;
+
+                const stockBadge = isOut
+                    ? `<span class="bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded uppercase">Agotado (0)</span>`
+                    : isLow
+                        ? `<span class="bg-amber-500 text-white text-[10px] font-bold px-2 py-0.5 rounded">¡Últimas ${product.stock} unid.!</span>`
+                        : `<span class="bg-emerald-600/90 text-white text-[10px] font-semibold px-2 py-0.5 rounded">Stock: ${product.stock} unid.</span>`;
+
+                const card = document.createElement('div');
+                card.className = `product-card bg-white dark:bg-brand-darkCard rounded-xl shadow-sm border border-gray-200 dark:border-brand-darkBorder overflow-hidden flex flex-col justify-between ${isOut ? 'opacity-75' : 'hover:shadow-xl hover:border-brand-wine/30 dark:hover:border-brand-gold/30'}`;
+                card.innerHTML = `
+                    <div>
+                        <div class="relative overflow-hidden bg-gray-100 dark:bg-brand-darkBg h-56 cursor-pointer" onclick="openQuickView(${product.id})">
+                            <img src="${product.image}" alt="${product.name}" loading="lazy" class="product-img w-full h-full object-cover transition duration-500 ${isOut ? 'grayscale' : ''}">
+                            <span class="absolute top-3 left-3 bg-brand-wine text-white text-[10px] font-bold px-2.5 py-1 rounded uppercase tracking-wider shadow">${product.tag}</span>
+                            <!-- Sello de Autenticidad MP -->
+                            <div class="absolute top-2.5 right-2.5 w-8 h-8 rounded-full bg-brand-slate/90 border border-brand-gold flex items-center justify-center shadow" title="Producto Certificado Marzzelli Perú">
+                                <span class="font-serif font-bold text-[10px] text-brand-gold">MP</span>
+                            </div>
+                            <div class="absolute bottom-3 left-3">${stockBadge}</div>
+                            <span class="absolute bottom-3 right-3 bg-white/90 dark:bg-brand-darkCard/90 text-brand-slate dark:text-white w-7 h-7 rounded-full flex items-center justify-center text-[11px] shadow">
+                                <i class="fas fa-eye"></i>
+                            </span>
+                        </div>
+                        <div class="p-4">
+                            <div class="flex justify-between items-center text-[10px] text-gray-400 uppercase mb-1">
+                                <span>${product.sku}</span>
+                                <span>${product.category}</span>
+                            </div>
+                            <h3 onclick="openQuickView(${product.id})" class="font-serif font-bold text-gray-800 dark:text-white text-sm sm:text-base leading-snug cursor-pointer hover:text-brand-wine dark:hover:text-brand-gold transition">${product.name}</h3>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 line-clamp-2">${product.description}</p>
+                        </div>
+                    </div>
+                    <div class="p-4 border-t border-gray-100 dark:border-brand-darkBorder flex items-center justify-between mt-auto">
+                        <div>
+                            <span class="text-[10px] text-gray-400 uppercase block">Precio</span>
+                            <span class="text-base sm:text-lg font-bold text-brand-slate dark:text-brand-gold">S/ ${product.price.toFixed(2)}</span>
+                        </div>
+                        <button ${isOut ? 'disabled' : `onclick="addToCart(${product.id})"`} 
+                            class="${isOut ? 'bg-gray-300 dark:bg-gray-800 text-gray-500 cursor-not-allowed' : 'bg-brand-slate dark:bg-brand-wine hover:bg-brand-wine dark:hover:bg-brand-wineLight text-white shadow'} text-xs px-3.5 py-2.5 rounded-lg transition flex items-center gap-1.5 font-medium">
+                            <i class="fas ${isOut ? 'fa-ban' : 'fa-plus'} text-[10px]"></i> ${isOut ? 'Sin Stock' : 'Agregar'}
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function openQuickView(productId) {
+            const p = productsData.find(item => item.id === productId);
+            if (!p) return;
+
+            document.getElementById('qvImage').src = p.image;
+            document.getElementById('qvTag').textContent = p.tag;
+            document.getElementById('qvName').textContent = p.name;
+            document.getElementById('qvSku').textContent = `SKU: ${p.sku} • Categoría: ${p.category}`;
+            document.getElementById('qvPrice').textContent = `S/ ${p.price.toFixed(2)}`;
+            document.getElementById('qvDescription').textContent = p.description;
+
+            const stockBadge = document.getElementById('qvStockBadge');
+            const addBtn = document.getElementById('qvAddBtn');
+
+            if (p.stock <= 0) {
+                stockBadge.className = 'text-xs font-bold text-rose-600';
+                stockBadge.textContent = 'Agotado (0 unid.)';
+                addBtn.disabled = true;
+                addBtn.className = 'mt-6 w-full bg-gray-300 dark:bg-gray-800 text-gray-500 font-semibold py-3 rounded-xl cursor-not-allowed text-sm';
+                addBtn.innerHTML = '<i class="fas fa-ban mr-1"></i> Sin Stock Disponible';
+            } else {
+                stockBadge.className = 'text-xs font-bold text-emerald-600 dark:text-emerald-400';
+                stockBadge.textContent = `Disponible: ${p.stock} unid.`;
+                addBtn.disabled = false;
+                addBtn.className = 'btn-shine mt-6 w-full bg-brand-slate dark:bg-brand-wine hover:bg-brand-wine dark:hover:bg-brand-wineLight text-white font-semibold py-3 rounded-xl shadow transition flex items-center justify-center gap-2 text-sm';
+                addBtn.innerHTML = '<i class="fas fa-shopping-bag"></i> Agregar al Carrito';
+                addBtn.onclick = function() {
+                    addToCart(p.id);
+                    closeQuickView();
+                };
+            }
+
+            document.getElementById('quickViewModal').classList.remove('hidden');
+        }
+
+        function closeQuickView() {
+            document.getElementById('quickViewModal').classList.add('hidden');
+        }
+
+        function filterProducts(category, shouldScroll = true) {
+            activeCategory = category;
+            document.querySelectorAll('#filterBtnGroup button').forEach(btn => {
+                btn.className = (btn.dataset.cat === category)
+                    ? 'filter-btn shrink-0 bg-brand-wine text-white text-xs px-4 py-2 rounded-full font-medium transition shadow-sm'
+                    : 'filter-btn shrink-0 bg-gray-200 dark:bg-brand-darkCard text-gray-700 dark:text-gray-300 text-xs px-4 py-2 rounded-full font-medium hover:bg-brand-wine hover:text-white transition';
+            });
+            renderProducts();
+            if (shouldScroll) document.getElementById('catalogo')?.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function searchProducts(q) {
+            const query = q.toLowerCase().trim();
+            if (!query) return renderProducts();
+            const filtered = productsData.filter(p => p.name.toLowerCase().includes(query) || p.sku.toLowerCase().includes(query));
+            renderProducts(filtered);
+        }
+
+        // ==========================================
+        // CART WITH INVENTORY & CONFIRMATIONS
+        // ==========================================
+        function getCartTotals() {
+            const rawSubtotal = cart.reduce((acc, i) => acc + i.price * i.quantity, 0);
+            const discount = rawSubtotal * appliedDiscountRate;
+            const finalTotal = Math.max(0, rawSubtotal - discount);
+            const igv = finalTotal - (finalTotal / 1.18);
+            return { rawSubtotal, discount, finalTotal, igv };
+        }
+
+        function addToCart(productId) {
+            const product = productsData.find(p => p.id === productId);
+            if (!product || product.stock <= 0) {
+                showToast('Producto sin stock disponible.', true);
+                return;
+            }
+
+            const existing = cart.find(item => item.id === productId);
+            const currentQtyInCart = existing ? existing.quantity : 0;
+
+            if (currentQtyInCart + 1 > product.stock) {
+                showToast(`Stock máximo alcanzado (${product.stock} unid. disponibles).`, true);
+                return;
+            }
+
+            if (existing) {
+                existing.quantity += 1;
+            } else {
+                cart.push({ id: product.id, sku: product.sku, name: product.name, price: product.price, image: product.image, quantity: 1 });
+            }
+
+            updateCartUI();
+
+            // Cart bounce feedback
+            const cartBtn = document.getElementById('cartHeaderBtn');
+            cartBtn.classList.remove('cart-bounce');
+            void cartBtn.offsetWidth;
+            cartBtn.classList.add('cart-bounce');
+
+            showToast(`Agregado: ${product.name}`);
+        }
+
+        function updateQuantity(productId, delta) {
+            const index = cart.findIndex(item => item.id === productId);
+            if (index === -1) return;
+
+            const product = productsData.find(p => p.id === productId);
+            const nextQty = cart[index].quantity + delta;
+
+            if (nextQty <= 0) {
+                requestRemoveFromCart(productId);
+            } else if (product && nextQty > product.stock) {
+                showToast(`Solo quedan ${product.stock} unidades en almacén.`, true);
+            } else {
+                cart[index].quantity = nextQty;
+                updateCartUI();
+            }
+        }
+
+        function requestRemoveFromCart(productId) {
+            const item = cart.find(i => i.id === productId);
+            if (!item) return;
+
+            openConfirmModal({
+                title: '¿Eliminar producto?',
+                message: `Se retirará "${item.name}" de tu carrito de compras.`,
+                confirmText: 'Sí, eliminar',
+                type: 'danger',
+                onConfirm: () => {
+                    cart = cart.filter(i => i.id !== productId);
+                    updateCartUI();
+                    showToast(`"${item.name}" eliminado del carrito.`);
+                }
+            });
+        }
+
+        function requestClearCart() {
+            if (cart.length === 0) return showToast('El carrito ya está vacío.');
+            openConfirmModal({
+                title: '¿Vaciar todo el carrito?',
+                message: 'Se eliminarán todos los artículos seleccionados hasta el momento.',
+                confirmText: 'Vaciar carrito',
+                type: 'danger',
+                onConfirm: () => {
+                    cart = [];
+                    updateCartUI();
+                    showToast('Carrito vaciado correctamente.');
+                }
+            });
+        }
+
+        function updateCartUI() {
+            const cartCount = document.getElementById('cartCount');
+            const cartContainer = document.getElementById('cartItemsContainer');
+            const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
+            cartCount.textContent = totalItems;
+
+            cartContainer.innerHTML = '';
+
+            if (cart.length === 0) {
+                cartContainer.innerHTML = `<div class="text-center py-12 text-gray-400 text-sm"><i class="fas fa-shopping-bag text-3xl mb-3 opacity-30 block"></i>Tu carrito está vacío</div>`;
+            } else {
+                cart.forEach(item => {
+                    const product = productsData.find(p => p.id === item.id);
+                    const maxStock = product ? product.stock : item.quantity;
+
+                    const el = document.createElement('div');
+                    el.className = 'flex items-center gap-3 border-b border-gray-100 dark:border-brand-darkBorder pb-3';
+                    el.innerHTML = `
+                        <img src="${item.image}" class="w-14 h-14 object-cover rounded-lg border border-gray-200 dark:border-brand-darkBorder shrink-0">
+                        <div class="flex-grow min-w-0">
+                            <h4 class="text-xs font-semibold text-gray-800 dark:text-white truncate">${item.name}</h4>
+                            <span class="text-xs text-brand-wine dark:text-brand-gold font-semibold block">S/ ${(item.price * item.quantity).toFixed(2)}</span>
+                            <div class="flex items-center gap-2 mt-1">
+                                <button onclick="updateQuantity(${item.id}, -1)" class="w-6 h-6 rounded bg-gray-100 dark:bg-brand-darkBg text-xs font-bold hover:bg-gray-200 dark:hover:bg-gray-800">-</button>
+                                <span class="text-xs font-medium w-4 text-center">${item.quantity}</span>
+                                <button onclick="updateQuantity(${item.id}, 1)" class="w-6 h-6 rounded bg-gray-100 dark:bg-brand-darkBg text-xs font-bold hover:bg-gray-200 dark:hover:bg-gray-800">+</button>
+                                <span class="text-[10px] text-gray-400 ml-1">(Disp: ${maxStock})</span>
+                            </div>
+                        </div>
+                        <button onclick="requestRemoveFromCart(${item.id})" aria-label="Eliminar producto" class="text-gray-400 hover:text-rose-500 text-sm p-1.5 transition">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    `;
+                    cartContainer.appendChild(el);
+                });
+            }
+
+            const { rawSubtotal, discount, finalTotal, igv } = getCartTotals();
+            document.getElementById('cartRawSubtotal').textContent = `S/ ${rawSubtotal.toFixed(2)}`;
+            document.getElementById('cartIgv').textContent = `S/ ${igv.toFixed(2)}`;
+            document.getElementById('cartSubtotal').textContent = `S/ ${finalTotal.toFixed(2)}`;
+
+            const discountRow = document.getElementById('cartDiscountRow');
+            if (discount > 0) {
+                discountRow.classList.remove('hidden');
+                document.getElementById('cartDiscountAmount').textContent = `- S/ ${discount.toFixed(2)}`;
+            } else {
+                discountRow.classList.add('hidden');
+            }
+        }
+
+        function toggleCartDrawer(forceOpen = false) {
+            const drawer = document.getElementById('cartDrawer');
+            if (forceOpen) drawer.classList.remove('hidden');
+            else drawer.classList.toggle('hidden');
+        }
+
+        // ==========================================
+        // SIMULATED PAYMENT GATEWAY
+        // ==========================================
+        function openCheckoutModal() {
+            if (cart.length === 0) {
+                showToast('Agrega al menos un producto al carrito.', true);
+                return;
+            }
+            const { finalTotal, discount } = getCartTotals();
+            document.getElementById('checkoutTotalDisplay').textContent = `S/ ${finalTotal.toFixed(2)}`;
+            const promoInfo = document.getElementById('checkoutPromoInfo');
+            if (discount > 0) {
+                promoInfo.textContent = `Incluye descuento MARZZELLI10 (-S/ ${discount.toFixed(2)})`;
+                promoInfo.classList.remove('hidden');
+            } else {
+                promoInfo.classList.add('hidden');
+            }
+            
+            document.getElementById('paymentForm').classList.remove('hidden');
+            document.getElementById('paymentResultView').classList.add('hidden');
+            toggleCartDrawer(false);
+            document.getElementById('checkoutModal').classList.remove('hidden');
+        }
+
+        function requestCancelCheckout() {
+            const isResultShowing = !document.getElementById('paymentResultView').classList.contains('hidden');
+            if (isResultShowing) {
+                closeCheckoutModal();
+                return;
+            }
+
+            openConfirmModal({
+                title: '¿Cancelar proceso de pago?',
+                message: 'Tus artículos seguirán guardados en el carrito para que puedas retomar la compra cuando gustes.',
+                confirmText: 'Sí, cancelar pago',
+                type: 'warning',
+                onConfirm: () => {
+                    closeCheckoutModal();
+                    showToast('Proceso de pago cancelado.');
+                }
+            });
+        }
+
+        function closeCheckoutModal() {
+            document.getElementById('checkoutModal').classList.add('hidden');
+        }
+
+        function processSimulatedPayment(e) {
+            e.preventDefault();
+            const btn = document.getElementById('paySubmitBtn');
+            const originalHTML = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Procesando en Cloud...`;
+
+            const customer = document.getElementById('custName').value.trim();
+            const method = document.getElementById('payMethod').value;
+            const outcome = document.getElementById('simulationOutcome').value;
+            const { finalTotal, discount } = getCartTotals();
+            const orderCode = `#MZ-${Math.floor(1000 + Math.random() * 9000)}`;
+            const nowTime = new Date().toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit' });
+
+            setTimeout(() => {
+                btn.disabled = false;
+                btn.innerHTML = originalHTML;
+
+                document.getElementById('paymentForm').classList.add('hidden');
+                const resultView = document.getElementById('paymentResultView');
+                resultView.classList.remove('hidden');
+
+                const iconBox = document.getElementById('resultIconContainer');
+                const title = document.getElementById('resultTitle');
+                const subtitle = document.getElementById('resultSubtitle');
+                const details = document.getElementById('resultDetailsBox');
+                const actions = document.getElementById('resultActions');
+
+                if (outcome === 'SUCCESS') {
+                    const purchasedSummary = cart.map(item => {
+                        const prod = productsData.find(p => p.id === item.id);
+                        if (prod) prod.stock = Math.max(0, prod.stock - item.quantity);
+                        return `${item.name} (x${item.quantity})`;
+                    }).join(', ');
+
+                    baseRevenue += finalTotal;
+                    ordersData.unshift({
+                        id: orderCode,
+                        customer,
+                        detail: `${purchasedSummary} • ${method}${discount > 0 ? ' (Cupón -10%)' : ''}`,
+                        total: finalTotal,
+                        status: 'APROBADO',
+                        reason: 'Transacción exitosa',
+                        time: `Hoy, ${nowTime}`
+                    });
+
+                    const whatsappSummary = encodeURIComponent(`Hola Marzzelli, confirmo mi pedido pagado *${orderCode}* por *S/ ${finalTotal.toFixed(2)}* (${purchasedSummary}).`);
+                    cart = [];
+                    saveState();
+                    renderProducts();
+                    updateCartUI();
+                    renderDashboardData();
+                    fireCelebration();
+
+                    iconBox.className = 'w-16 h-16 rounded-full mx-auto flex items-center justify-center text-3xl bg-emerald-100 text-emerald-600';
+                    iconBox.innerHTML = '<i class="fas fa-check"></i>';
+                    title.className = 'font-serif font-bold text-xl text-emerald-600 dark:text-emerald-400';
+                    title.textContent = '¡Compra Aprobada con Éxito!';
+                    subtitle.textContent = 'El inventario ha sido descontado y la orden quedó auditada en el Dashboard.';
+                    details.innerHTML = `
+                        <div class="flex justify-between"><span class="text-gray-500">N° Comprobante:</span><span class="font-bold">${orderCode}</span></div>
+                        <div class="flex justify-between"><span class="text-gray-500">Cliente:</span><span>${customer}</span></div>
+                        <div class="flex justify-between"><span class="text-gray-500">Método:</span><span>${method}</span></div>
+                        ${discount > 0 ? `<div class="flex justify-between text-emerald-600"><span>Ahorro Cupón:</span><span>- S/ ${discount.toFixed(2)}</span></div>` : ''}
+                        <div class="flex justify-between"><span class="text-gray-500">Monto Pagado:</span><span class="font-bold text-brand-wine dark:text-brand-gold">S/ ${finalTotal.toFixed(2)}</span></div>
+                    `;
+                    actions.innerHTML = `
+                        <a href="https://wa.me/51987654321?text=${whatsappSummary}" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs px-4 py-2.5 rounded-lg font-medium flex items-center justify-center gap-1.5">
+                            <i class="fab fa-whatsapp"></i> Enviar Comprobante
+                        </a>
+                        <button onclick="closeCheckoutModal(); toggleView('dashboard')" class="bg-brand-slate text-white text-xs px-4 py-2.5 rounded-lg font-medium">
+                            Ver Impacto en Dashboard
+                        </button>
+                    `;
+                } else {
+                    const errorMap = {
+                        DECLINED_FUNDS: { title: 'Pago Rechazado por el Banco', code: 'ERR_INSUFFICIENT_FUNDS (402)', msg: 'La entidad emisora rechazó el cargo. Tu carrito y el inventario no sufrieron cambios.' },
+                        GATEWAY_TIMEOUT: { title: 'Error de Comunicación Cloud', code: 'ERR_GATEWAY_TIMEOUT (504)', msg: 'El proveedor de pagos tardó demasiado en responder. Puedes reintentar sin cargo doble.' },
+                        STOCK_CONFLICT: { title: 'Conflicto de Stock Concurrente', code: 'ERR_INVENTORY_LOCK (409)', msg: 'Otro cliente reservó la última unidad segundos antes de confirmar el pago.' }
+                    };
+                    const err = errorMap[outcome];
+
+                    ordersData.unshift({
+                        id: orderCode,
+                        customer,
+                        detail: `Intento fallido • ${method}`,
+                        total: finalTotal,
+                        status: 'RECHAZADO',
+                        reason: err.code,
+                        time: `Hoy, ${nowTime}`
+                    });
+                    saveState();
+                    renderDashboardData();
+
+                    iconBox.className = 'w-16 h-16 rounded-full mx-auto flex items-center justify-center text-3xl bg-rose-100 text-rose-600';
+                    iconBox.innerHTML = '<i class="fas fa-xmark"></i>';
+                    title.className = 'font-serif font-bold text-xl text-rose-600 dark:text-rose-400';
+                    title.textContent = err.title;
+                    subtitle.textContent = err.msg;
+                    details.innerHTML = `
+                        <div class="flex justify-between"><span class="text-gray-500">ID Intento:</span><span class="font-bold">${orderCode}</span></div>
+                        <div class="flex justify-between"><span class="text-gray-500">Código Error:</span><span class="font-mono text-rose-600">${err.code}</span></div>
+                        <div class="flex justify-between"><span class="text-gray-500">Inventario:</span><span class="text-emerald-600 font-semibold">Intacto (Rollback OK)</span></div>
+                    `;
+                    actions.innerHTML = `
+                        <button onclick="openCheckoutModal()" class="bg-brand-wine hover:bg-brand-wineLight text-white text-xs px-4 py-2.5 rounded-lg font-semibold">
+                            Reintentar con otro escenario
+                        </button>
+                        <button onclick="closeCheckoutModal()" class="border border-gray-300 dark:border-brand-darkBorder text-xs px-4 py-2.5 rounded-lg">
+                            Cerrar
+                        </button>
+                    `;
+                }
+            }, 750);
+        }
+
+        // ==========================================
+        // DASHBOARD RENDER & INVENTORY CONTROLS
+        // ==========================================
+        function renderDashboardData() {
+            document.getElementById('kpiRevenue').textContent = `S/ ${baseRevenue.toLocaleString('es-PE', { minimumFractionDigits: 2 })}`;
+            const approvedCount = 340 + ordersData.filter(o => o.status === 'APROBADO').length;
+            const failedCount = ordersData.filter(o => o.status === 'RECHAZADO').length;
+            document.getElementById('kpiOrdersCount').textContent = approvedCount;
+            document.getElementById('kpiFailedOrders').textContent = failedCount;
+            document.getElementById('kpiSubscribers').textContent = subscribersCount;
+
+            const totalStock = productsData.reduce((acc, p) => acc + p.stock, 0);
+            const lowStockItems = productsData.filter(p => p.stock <= 3).length;
+            document.getElementById('kpiTotalStock').textContent = `${totalStock} unid.`;
+            document.getElementById('kpiLowStockAlert').innerHTML = `<i class="fas fa-exclamation-triangle mr-1"></i> ${lowStockItems} productos con stock crítico/agotado`;
+
+            const invBody = document.getElementById('inventoryTableBody');
+            invBody.innerHTML = '';
+            productsData.forEach(p => {
+                const statusBadge = p.stock === 0
+                    ? `<span class="bg-red-100 dark:bg-red-950 text-red-700 dark:text-red-300 px-2 py-0.5 rounded-full font-semibold text-[10px]">Agotado</span>`
+                    : p.stock <= 3
+                        ? `<span class="bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300 px-2 py-0.5 rounded-full font-semibold text-[10px]">Stock Bajo</span>`
+                        : `<span class="bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 px-2 py-0.5 rounded-full font-semibold text-[10px]">Disponible</span>`;
+
+                invBody.innerHTML += `
+                    <tr class="hover:bg-gray-50 dark:hover:bg-white/5">
+                        <td class="py-3 px-4 font-mono font-bold">${p.sku}</td>
+                        <td class="py-3 px-4 font-medium">${p.name}</td>
+                        <td class="py-3 px-4 uppercase text-[11px] text-gray-500">${p.category}</td>
+                        <td class="py-3 px-4 font-semibold">S/ ${p.price.toFixed(2)}</td>
+                        <td class="py-3 px-4 font-bold text-sm">${p.stock} unid.</td>
+                        <td class="py-3 px-4">${statusBadge}</td>
+                        <td class="py-3 px-4 text-right space-x-1">
+                            <button onclick="adjustProductStock(${p.id}, 5)" class="bg-emerald-600 hover:bg-emerald-700 text-white px-2.5 py-1 rounded text-[11px] font-medium">+5 Reponer</button>
+                            <button onclick="requestDepleteStock(${p.id})" class="bg-gray-200 dark:bg-brand-darkBg hover:bg-rose-600 hover:text-white px-2.5 py-1 rounded text-[11px] transition">Agotar (0)</button>
+                        </td>
+                    </tr>
+                `;
             });
 
-            document.querySelectorAll('.animate-on-scroll').forEach((card) => {
-                observer.observe(card);
+            const ordBody = document.getElementById('ordersTableBody');
+            ordBody.innerHTML = '';
+            ordersData.forEach(o => {
+                const badge = o.status === 'APROBADO'
+                    ? `<span class="bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 px-2.5 py-0.5 rounded-full font-semibold text-[10px]">APROBADO</span>`
+                    : `<span class="bg-rose-100 dark:bg-rose-950 text-rose-700 dark:text-rose-300 px-2.5 py-0.5 rounded-full font-semibold text-[10px]">RECHAZADO (${o.reason})</span>`;
+
+                ordBody.innerHTML += `
+                    <tr class="hover:bg-gray-50 dark:hover:bg-white/5">
+                        <td class="py-3 px-4 font-bold text-brand-slate dark:text-white">${o.id}</td>
+                        <td class="py-3 px-4">${o.customer}</td>
+                        <td class="py-3 px-4 max-w-xs truncate">${o.detail}</td>
+                        <td class="py-3 px-4 font-semibold">S/ ${o.total.toFixed(2)}</td>
+                        <td class="py-3 px-4">${badge}</td>
+                        <td class="py-3 px-4 text-gray-400">${o.time}</td>
+                    </tr>
+                `;
             });
-        });
+        }
+
+        function adjustProductStock(productId, delta) {
+            const prod = productsData.find(p => p.id === productId);
+            if (!prod) return;
+            prod.stock = Math.max(0, prod.stock + delta);
+            saveState();
+            renderProducts();
+            renderDashboardData();
+            showToast(`Stock de "${prod.name}" actualizado a ${prod.stock} unid.`);
+        }
+
+        function requestDepleteStock(productId) {
+            const prod = productsData.find(p => p.id === productId);
+            if (!prod || prod.stock === 0) return;
+
+            openConfirmModal({
+                title: '¿Marcar como Agotado (0)?',
+                message: `Esto bloqueará temporalmente la venta de "${prod.name}" en la tienda pública hasta que repongas stock.`,
+                confirmText: 'Sí, agotar stock',
+                type: 'danger',
+                onConfirm: () => adjustProductStock(productId, -prod.stock)
+            });
+        }
+
+        function requestResetDemo() {
+            openConfirmModal({
+                title: '¿Reiniciar datos del Demo?',
+                message: 'Se restaurará el inventario inicial, los ingresos base y la bitácora de transacciones.',
+                confirmText: 'Reiniciar Demo',
+                type: 'warning',
+                onConfirm: () => {
+                    productsData = structuredClone(DEFAULT_PRODUCTS);
+                    ordersData = structuredClone(DEFAULT_ORDERS);
+                    baseRevenue = 48520.00;
+                    subscribersCount = 128;
+                    cart = [];
+                    appliedDiscountRate = 0;
+                    localStorage.removeItem('mz_nl_subscribed');
+                    saveState();
+                    document.getElementById('activeCouponBadge').classList.add('hidden');
+                    document.getElementById('promoCodeInput').value = '';
+                    renderProducts();
+                    updateCartUI();
+                    renderDashboardData();
+                    updateChartsTheme();
+                    showToast('Demo restaurado a valores iniciales.');
+                }
+            });
+        }
+
+        // NEW PRODUCT MODAL
+        function toggleNewProductModal(show) {
+            document.getElementById('newProductModal').classList.toggle('hidden', !show);
+        }
+
+        function handleAddProduct(e) {
+            e.preventDefault();
+            const newProd = {
+                id: Date.now(),
+                sku: `MZ-0${productsData.length + 1}`,
+                name: document.getElementById('npName').value.trim(),
+                category: document.getElementById('npCategory').value,
+                price: parseFloat(document.getElementById('npPrice').value),
+                stock: parseInt(document.getElementById('npStock').value, 10),
+                image: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=600&q=80',
+                tag: 'Nuevo',
+                description: document.getElementById('npDesc').value.trim()
+            };
+            productsData.unshift(newProd);
+            saveState();
+            renderProducts();
+            renderDashboardData();
+            e.target.reset();
+            toggleNewProductModal(false);
+            showToast(`"${newProd.name}" publicado en la tienda.`);
+        }
+
+        // UTILITIES & CHARTS
+        function showToast(text, isError = false) {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast-enter ${isError ? 'bg-rose-700' : 'bg-brand-slate dark:bg-brand-wine'} text-white text-xs px-4 py-3 rounded-xl shadow-xl border border-white/15 flex items-center gap-2`;
+            toast.innerHTML = `<i class="fas ${isError ? 'fa-exclamation-circle text-amber-300' : 'fa-check-circle text-emerald-400'}"></i> <span>${text}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => { toast.remove(); }, 2800);
+        }
+
+        function checkoutWhatsApp() {
+            if (cart.length === 0) return showToast('Tu carrito está vacío.', true);
+            const { finalTotal, discount } = getCartTotals();
+            let msg = 'Hola *INDUSTRIAS MARZZELLI*, deseo cotizar:%0A';
+            cart.forEach(i => { msg += `- ${i.name} (x${i.quantity}): S/ ${(i.price * i.quantity).toFixed(2)}%0A`; });
+            if (discount > 0) msg += `Cupón aplicado: MARZZELLI10 (-S/ ${discount.toFixed(2)})%0A`;
+            msg += `*Total: S/ ${finalTotal.toFixed(2)}*`;
+            window.open(`https://wa.me/51987654321?text=${msg}`, '_blank');
+        }
+
+        function toggleView(target = null) {
+            currentView = target || (currentView === 'storefront' ? 'dashboard' : 'storefront');
+            document.getElementById('storefrontView').classList.toggle('hidden', currentView === 'dashboard');
+            document.getElementById('dashboardView').classList.toggle('hidden', currentView !== 'dashboard');
+            document.getElementById('viewToggleText').textContent = currentView === 'dashboard' ? 'Tienda' : 'Dashboard';
+            document.getElementById('viewToggleIcon').className = currentView === 'dashboard' ? 'fas fa-store' : 'fas fa-chart-line';
+            if (currentView === 'dashboard') { renderDashboardData(); updateChartsTheme(); }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+            document.getElementById('mobileMenuIcon').className = menu.classList.contains('hidden') ? 'fas fa-bars text-xl' : 'fas fa-times text-xl';
+        }
+
+        function initDashboardCharts() {
+            const isDark = document.documentElement.classList.contains('dark');
+            const textColor = isDark ? '#9CA3AF' : '#4B5563';
+            const gridColor = isDark ? 'rgba(255,255,255,0.07)' : 'rgba(0,0,0,0.06)';
+
+            salesChartInstance = new Chart(document.getElementById('salesChart').getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: ['Jun', 'Jul', 'Ago', 'Set', 'Oct', 'Nov'],
+                    datasets: [{ label: 'Ventas S/', data: [28000, 34000, 31000, 42000, 45000, baseRevenue], backgroundColor: isDark ? '#9E1B3B' : '#6B0D23', borderRadius: 6 }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: textColor }, grid: { display: false } }, y: { beginAtZero: true, ticks: { color: textColor }, grid: { color: gridColor } } } }
+            });
+
+            categoryChartInstance = new Chart(document.getElementById('categoryChart').getContext('2d'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['Damas', 'Caballeros', 'Cuero & Textil', 'Calzado'],
+                    datasets: [{ data: [35, 30, 20, 15], borderColor: isDark ? '#151820' : '#FFFFFF', backgroundColor: ['#6B0D23', '#D4AF37', '#3E424B', '#9E1B3B'] }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: textColor, boxWidth: 12, font: { size: 11 } } } } }
+            });
+        }
+
+        function updateChartsTheme() {
+            if (!salesChartInstance || !categoryChartInstance) return;
+            const isDark = document.documentElement.classList.contains('dark');
+            const textColor = isDark ? '#9CA3AF' : '#4B5563';
+            salesChartInstance.data.datasets[0].data[5] = baseRevenue;
+            salesChartInstance.data.datasets[0].backgroundColor = isDark ? '#9E1B3B' : '#6B0D23';
+            salesChartInstance.options.scales.x.ticks.color = textColor;
+            salesChartInstance.options.scales.y.ticks.color = textColor;
+            salesChartInstance.update();
+            categoryChartInstance.data.datasets[0].borderColor = isDark ? '#151820' : '#FFFFFF';
+            categoryChartInstance.options.plugins.legend.labels.color = textColor;
+            categoryChartInstance.update();
+        }
     </script>
 </body>
 </html>
